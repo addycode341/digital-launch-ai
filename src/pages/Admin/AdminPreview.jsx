@@ -1,73 +1,73 @@
-import {
-useEffect,
-useState
-} from "react";
+    import {
+    useEffect,
+    useState
+    } from "react";
 
 
-import {
-useParams,
-useNavigate
-} from "react-router-dom";
+    import {
+    useParams,
+    useNavigate
+    } from "react-router-dom";
 
 
-import {
-collection,
-getDocs,
-doc,
-getDoc,
-updateDoc
-} from "firebase/firestore";
+    import {
+    collection,
+    getDocs,
+    doc,
+    getDoc,
+    updateDoc
+    } from "firebase/firestore";
 
 
-import {
-db
-} from "../../firebase";
+    import {
+    db
+    } from "../../firebase";
 
 
-import {
-Monitor,
-Smartphone,
-ArrowLeft,
-Edit,
-Rocket,
-CheckCircle
-} from "lucide-react";
+    import {
+    Monitor,
+    Smartphone,
+    ArrowLeft,
+    Edit,
+    Rocket,
+    CheckCircle
+    } from "lucide-react";
 
 
 
-import Hero from "../../components/website/Hero";
-import About from "../../components/website/About";
-import Gallery from "../../components/website/Gallery";
-import Features from "../../components/website/Features";
-import Services from "../../components/website/Services";
-import Pricing from "../../components/website/Pricing";
-import Testimonials from "../../components/website/Testimonials";
-import FAQ from "../../components/website/FAQ";
-import Contact from "../../components/website/Contact";
-import LeadForm from "../../components/website/LeadForm";
-import Footer from "../../components/website/Footer";
+    import Hero from "../../components/website/Hero";
+    import About from "../../components/website/About";
+    import Gallery from "../../components/website/Gallery";
+    import Features from "../../components/website/Features";
+    import Services from "../../components/website/Services";
+    import Pricing from "../../components/website/Pricing";
+    import Testimonials from "../../components/website/Testimonials";
+    import FAQ from "../../components/website/FAQ";
+    import Contact from "../../components/website/Contact";
+    import LeadForm from "../../components/website/LeadForm";
+    import Footer from "../../components/website/Footer";
 
 
 
 
 
-const AdminPreview =()=>{
+    const AdminPreview =()=>{
 
 
-const {id}=useParams();
+    const {id}=useParams();
 
-const navigate=useNavigate();
+    const navigate=useNavigate();
 
 
 
-const [website,setWebsite]=useState(null);
+    const [website,setWebsite]=useState(null);
 
-const [loading,setLoading]=useState(true);
+    const [loading,setLoading]=useState(true);
 
 
-const [mode,setMode]=useState("desktop");
+    const [mode,setMode]=useState("desktop");
 
-const [updating,setUpdating]=useState(false);
+    const [updating,setUpdating]=useState(false);
 
 
 
@@ -76,11 +76,11 @@ const [updating,setUpdating]=useState(false);
 
 
 
-useEffect(()=>{
+    useEffect(()=>{
 
-fetchWebsite();
+    fetchWebsite();
 
-},[]);
+    },[]);
 
 
 
@@ -90,108 +90,108 @@ fetchWebsite();
 
 
 
-const fetchWebsite=async()=>{
+    const fetchWebsite=async()=>{
 
 
-try{
+    try{
 
 
-const usersSnap = await getDocs(
+    const usersSnap = await getDocs(
 
-collection(db,"users")
+    collection(db,"users")
 
-);
+    );
 
 
 
-let found=null;
+    let found=null;
 
 
 
-for(const user of usersSnap.docs){
+    for(const user of usersSnap.docs){
 
 
 
-const websiteRef = doc(
+    const websiteRef = doc(
 
-db,
+    db,
 
-"users",
+    "users",
 
-user.id,
+    user.id,
 
-"websites",
+    "websites",
 
-id
+    id
 
-);
+    );
 
 
 
-const websiteSnap = await getDoc(
-websiteRef
-);
+    const websiteSnap = await getDoc(
+    websiteRef
+    );
 
 
 
 
 
-if(websiteSnap.exists()){
+    if(websiteSnap.exists()){
 
 
-const data=websiteSnap.data();
+    const data=websiteSnap.data();
 
 
 
-found={
+    found={
 
-...data.websiteData,
+    ...data.websiteData,
 
-title:data.title || data.websiteData?.title,
+    title:data.title || data.websiteData?.title,
 
-status:data.status || "draft",
+    status:data.status || "draft",
 
-ownerId:user.id,
+    ownerId:user.id,
 
-websiteId:id
+    websiteId:id
 
 
-};
+    };
 
 
 
-break;
+    break;
 
 
-}
+    }
 
 
 
-}
+    }
 
 
 
-setWebsite(found);
+    setWebsite(found);
 
 
 
-}
+    }
 
-catch(error){
+    catch(error){
 
-console.log(error);
+    console.log(error);
 
-}
+    }
 
-finally{
+    finally{
 
-setLoading(false);
+    setLoading(false);
 
-}
+    }
 
 
 
-};
+    };
 
 
 
@@ -201,89 +201,89 @@ setLoading(false);
 
 
 
-const changeStatus=async()=>{
+    const changeStatus=async()=>{
 
 
-try{
+    try{
 
 
-setUpdating(true);
+    setUpdating(true);
 
 
 
-const ref = doc(
+    const ref = doc(
 
-db,
+    db,
 
-"users",
+    "users",
 
-website.ownerId,
+    website.ownerId,
 
-"websites",
+    "websites",
 
-website.websiteId
+    website.websiteId
 
-);
+    );
 
 
 
-await updateDoc(ref,{
+    await updateDoc(ref,{
 
-status:
+    status:
 
-website.status==="published"
+    website.status==="published"
 
-?
+    ?
 
-"draft"
+    "draft"
 
-:
+    :
 
-"published"
+    "published"
 
-});
+    });
 
 
 
 
 
-setWebsite({
+    setWebsite({
 
-...website,
+    ...website,
 
-status:
+    status:
 
-website.status==="published"
+    website.status==="published"
 
-?
+    ?
 
-"draft"
+    "draft"
 
-:
+    :
 
-"published"
+    "published"
 
-});
+    });
 
 
 
-}
+    }
 
-catch(error){
+    catch(error){
 
-console.log(error);
+    console.log(error);
 
-}
+    }
 
-finally{
+    finally{
 
-setUpdating(false);
+    setUpdating(false);
 
-}
+    }
 
 
 
-};
+    };
 
 
 
@@ -293,28 +293,28 @@ setUpdating(false);
 
 
 
-if(loading){
+    if(loading){
 
 
-return(
+    return(
 
-<div className="
-min-h-screen
-bg-[#050816]
-text-white
-flex
-items-center
-justify-center
-text-xl
-">
+    <div className="
+    min-h-screen
+    bg-[#050816]
+    text-white
+    flex
+    items-center
+    justify-center
+    text-xl
+    ">
 
-Loading Preview 🚀
+    Loading Preview 🚀
 
-</div>
+    </div>
 
-)
+    )
 
-}
+    }
 
 
 
@@ -323,28 +323,28 @@ Loading Preview 🚀
 
 
 
-if(!website){
+    if(!website){
 
 
-return(
+    return(
 
-<div className="
-min-h-screen
-bg-[#050816]
-text-white
-flex
-items-center
-justify-center
-text-xl
-">
+    <div className="
+    min-h-screen
+    bg-[#050816]
+    text-white
+    flex
+    items-center
+    justify-center
+    text-xl
+    ">
 
-Website Not Found ❌
+    Website Not Found ❌
 
-</div>
+    </div>
 
-)
+    )
 
-}
+    }
 
 
 
@@ -353,113 +353,113 @@ Website Not Found ❌
 
 
 
-return(
+    return(
 
 
-<div className="
-min-h-screen
-bg-white
-">
+    <div className="
+    min-h-screen
+    bg-white
+    ">
 
 
 
 
 
 
-{/* ADMIN TOOLBAR */}
+    {/* ADMIN TOOLBAR */}
 
 
 
-<div className="
-sticky
-top-0
-z-50
-bg-[#050816]
-text-white
-px-6
-py-4
-flex
-justify-between
-items-center
-border-b
-border-white/10
-">
+    <div className="
+    sticky
+    top-0
+    z-50
+    bg-[#050816]
+    text-white
+    px-6
+    py-4
+    flex
+    justify-between
+    items-center
+    border-b
+    border-white/10
+    ">
 
 
 
 
 
-<div>
+    <div>
 
 
-<h1 className="
-font-bold
-text-xl
-">
+    <h1 className="
+    font-bold
+    text-xl
+    ">
 
-🚀 DigitalLaunch AI Preview
+    🚀 DigitalLaunch AI Preview
 
-</h1>
+    </h1>
 
 
-<div className="
-flex
-items-center
-gap-3
-mt-1
-">
+    <div className="
+    flex
+    items-center
+    gap-3
+    mt-1
+    ">
 
 
-<p className="
-text-gray-400
-text-sm
-">
+    <p className="
+    text-gray-400
+    text-sm
+    ">
 
-{website.title}
+    {website.title}
 
-</p>
+    </p>
 
 
 
 
-<span className={
+    <span className={
 
-`
-text-xs
-px-3
-py-1
-rounded-full
+    `
+    text-xs
+    px-3
+    py-1
+    rounded-full
 
-${
-website.status==="published"
+    ${
+    website.status==="published"
 
-?
+    ?
 
-"bg-green-500/20 text-green-400"
+    "bg-green-500/20 text-green-400"
 
-:
+    :
 
-"bg-yellow-500/20 text-yellow-400"
+    "bg-yellow-500/20 text-yellow-400"
 
-}
+    }
 
-`
+    `
 
-}>
+    }>
 
 
-{website.status}
+    {website.status}
 
 
-</span>
+    </span>
 
 
 
-</div>
+    </div>
 
 
 
-</div>
+    </div>
 
 
 
@@ -467,50 +467,50 @@ website.status==="published"
 
 
 
-<div className="
-flex
-gap-3
-items-center
-">
+    <div className="
+    flex
+    gap-3
+    items-center
+    ">
 
 
 
 
 
-<button
+    <button
 
-onClick={()=>setMode("desktop")}
+    onClick={()=>setMode("desktop")}
 
-className={
+    className={
 
-`
-p-3
-rounded-xl
+    `
+    p-3
+    rounded-xl
 
-${
-mode==="desktop"
+    ${
+    mode==="desktop"
 
-?
+    ?
 
-"bg-purple-600"
+    "bg-purple-600"
 
-:
+    :
 
-"bg-white/10"
+    "bg-white/10"
 
-}
+    }
 
-`
+    `
 
-}
+    }
 
->
+    >
 
 
-<Monitor size={20}/>
+    <Monitor size={20}/>
 
 
-</button>
+    </button>
 
 
 
@@ -518,40 +518,40 @@ mode==="desktop"
 
 
 
-<button
+    <button
 
-onClick={()=>setMode("mobile")}
+    onClick={()=>setMode("mobile")}
 
-className={
+    className={
 
-`
-p-3
-rounded-xl
+    `
+    p-3
+    rounded-xl
 
-${
-mode==="mobile"
+    ${
+    mode==="mobile"
 
-?
+    ?
 
-"bg-purple-600"
+    "bg-purple-600"
 
-:
+    :
 
-"bg-white/10"
+    "bg-white/10"
 
-}
+    }
 
-`
+    `
 
-}
+    }
 
->
+    >
 
 
-<Smartphone size={20}/>
+    <Smartphone size={20}/>
 
 
-</button>
+    </button>
 
 
 
@@ -559,75 +559,75 @@ mode==="mobile"
 
 
 
-<button
+    <button
 
-onClick={changeStatus}
+    onClick={changeStatus}
 
-disabled={updating}
+    disabled={updating}
 
-className="
-flex
-items-center
-gap-2
-bg-green-600
-px-5
-py-3
-rounded-xl
-"
+    className="
+    flex
+    items-center
+    gap-2
+    bg-green-600
+    px-5
+    py-3
+    rounded-xl
+    "
 
 
->
+    >
 
 
-<Rocket size={18}/>
+    <Rocket size={18}/>
 
 
-{
+    {
 
-website.status==="published"
+    website.status==="published"
 
-?
+    ?
 
-"Unpublish"
+    "Unpublish"
 
-:
+    :
 
-"Publish"
+    "Publish"
 
-}
+    }
 
 
-</button>
+    </button>
 
 
 
 
 
 
-<button
+    <button
 
-onClick={()=>navigate(`/admin/edit/${id}`)}
+    onClick={()=>navigate(`/admin/edit/${id}`)}
 
-className="
-flex
-items-center
-gap-2
-bg-blue-600
-px-5
-py-3
-rounded-xl
-"
+    className="
+    flex
+    items-center
+    gap-2
+    bg-blue-600
+    px-5
+    py-3
+    rounded-xl
+    "
 
 
->
+    >
 
 
-<Edit size={18}/>
+    <Edit size={18}/>
 
-Edit
+    Edit
 
 
-</button>
+    </button>
 
 
 
@@ -635,39 +635,39 @@ Edit
 
 
 
-<button
+    <button
 
-onClick={()=>navigate(-1)}
+    onClick={()=>navigate(-1)}
 
-className="
-flex
-items-center
-gap-2
-bg-white/10
-px-5
-py-3
-rounded-xl
-"
+    className="
+    flex
+    items-center
+    gap-2
+    bg-white/10
+    px-5
+    py-3
+    rounded-xl
+    "
 
 
->
+    >
 
 
-<ArrowLeft size={18}/>
+    <ArrowLeft size={18}/>
 
-Back
+    Back
 
 
-</button>
+    </button>
 
 
 
 
-</div>
+    </div>
 
 
 
-</div>
+    </div>
 
 
 
@@ -677,104 +677,104 @@ Back
 
 
 
-{/* WEBSITE PREVIEW */}
+    {/* WEBSITE PREVIEW */}
 
 
 
-<div
+    <div
 
-className={
+    className={
 
-`
+    `
 
-mx-auto
-transition-all
-duration-500
+    mx-auto
+    transition-all
+    duration-500
 
-${
-mode==="mobile"
+    ${
+    mode==="mobile"
 
-?
+    ?
 
-"max-w-sm"
+    "max-w-sm"
 
-:
+    :
 
-"max-w-full"
+    "max-w-full"
 
-}
+    }
 
-`
+    `
 
-}
+    }
 
->
+    >
 
 
 
 
 
-<Hero website={website}/>
+    <Hero website={website}/>
 
 
-<About website={website}/>
+    <About website={website}/>
 
 
-<Gallery website={website}/>
+    <Gallery website={website}/>
 
 
-<Features website={website}/>
+    <Features website={website}/>
 
 
-<Services website={website}/>
+    <Services website={website}/>
 
 
-<Pricing website={website}/>
+    <Pricing website={website}/>
 
 
-<Testimonials website={website}/>
+    <Testimonials website={website}/>
 
 
-<FAQ website={website}/>
+    <FAQ website={website}/>
 
 
-<Contact website={website}/>
+    <Contact website={website}/>
 
 
 
 
 
-<LeadForm
+    <LeadForm
 
-ownerId={website.ownerId}
+    ownerId={website.ownerId}
 
-websiteId={website.websiteId}
+    websiteId={website.websiteId}
 
-/>
+    />
 
 
 
 
 
-<Footer website={website}/>
+    <Footer website={website}/>
 
 
 
 
 
-</div>
+    </div>
 
 
 
 
 
-</div>
+    </div>
 
 
-)
+    )
 
-}
+    }
 
 
 
-export default AdminPreview;
+    export default AdminPreview;

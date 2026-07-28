@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 function Services() {
 
 
-  const services = [
+  const Services = [
 
     {
       title: "AI Website Creation",
@@ -128,7 +128,7 @@ function Services() {
 
 
           {
-            services.map((service,index)=>(
+            Services.map((service,index)=>(
 
 
               <motion.div

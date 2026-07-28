@@ -13,7 +13,6 @@ import Footer from "../components/Footer";
 import WhatsAppWidget from "../components/WhatsAppWidget";
 
 
-
 function Home(){
 
 
@@ -31,7 +30,7 @@ min-h-screen
 w-full
 bg-slate-950
 text-white
-overflow-hidden
+overflow-x-hidden
 "
 
 >
@@ -42,15 +41,23 @@ overflow-hidden
 
 
 
-<main>
+<main
 
+className="
+w-full
+"
+
+>
 
 
 <Hero
 
 onStart={()=>navigate("/builder")}
 
+onDemo={()=>navigate("/templates")}
+
 />
+
 
 
 
@@ -88,6 +95,7 @@ onStart={()=>navigate("/builder")}
 
 
 
+
 <Footer />
 
 
@@ -106,7 +114,6 @@ onStart={()=>navigate("/builder")}
 )
 
 }
-
 
 
 export default Home;
