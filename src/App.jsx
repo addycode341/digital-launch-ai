@@ -59,10 +59,10 @@ import BakeryWebsite from "./Template/Bakery/BakeryWebsite";
 import PrintingBusiness from "./Template/PrintingBusiness/PrintingBusiness";
 import Gym from "./Template/Gym/Gym";
 import RealEstate from "./Template/real-estate/RealEstate";
-
-
-
-
+import RestaurantWebsite from "./Template/Restaurant/RestaurantWebsite";
+import Salon from "./Template/Salon/SalonWebsite";
+import HotelWebsite from "./Template/Hotel/HotelWebsite";
+import MobileStoreWebsite from "./Template/MobileStore/MobileStoreWebsite";
 function App(){
 
 return(
@@ -114,9 +114,26 @@ path="/real-estate-demo"
 element={<RealEstate/>}
 />
 
+<Route
+path="/restaurant-demo"
+element={<RestaurantWebsite/>}
+/>
 
 
+<Route
+path="/salon-demo"
+element={<Salon/>}
+/>
 
+<Route
+path="/hotel-demo"
+element={<HotelWebsite/>}
+/>
+
+<Route
+path="/mobile-demo"
+element={<MobileStoreWebsite/>}
+/>
 
 {/* USER DASHBOARD */}
 

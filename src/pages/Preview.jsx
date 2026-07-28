@@ -1,30 +1,27 @@
 import { publishWebsite } from "../services/websiteService";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { Rocket, Pencil, RefreshCcw } from "lucide-react";
 
-import TemplateRenderer from "../Template/TemplateRenderer";    
+import TemplateRenderer from "../Template/TemplateRenderer";
+
+
 
 function Preview(){
 
 
-const [websiteData,setWebsiteData] = useState(null);
-
-const [device,setDevice] = useState("desktop");
-
-const [publishing,setPublishing] = useState(false);
-
-
+const [websiteData,setWebsiteData]=useState(null);
+const [refresh,setRefresh]=useState(0);
+const [publishing,setPublishing]=useState(false);
 
 
 
 useEffect(()=>{
 
 
-const data = JSON.parse(
-
+const data =
+JSON.parse(
 localStorage.getItem("websiteData")
-
 );
 
 
@@ -38,7 +35,8 @@ setWebsiteData(data);
 
 
 
-const handlePublish = async()=>{
+
+const handlePublish=async()=>{
 
 
 try{
@@ -48,21 +46,23 @@ setPublishing(true);
 
 
 
-const data = JSON.parse(
-
+const data =
+JSON.parse(
 localStorage.getItem("websiteData")
-
 );
 
 
 
-const slug = await publishWebsite(data);
+const slug =
+await publishWebsite(data);
 
 
 
 alert(
 
-"Website Published 🚀\n\n/site/" + slug
+`🎉 Website Published
+
+preview.digitallaunch.ai/${slug}`
 
 );
 
@@ -70,22 +70,18 @@ alert(
 
 }
 
-catch(error){
+catch(err){
 
+console.log(err);
 
-console.log(error);
-
-
-alert("Publish failed");
-
+alert("Publish Failed");
 
 }
 
+
 finally{
 
-
 setPublishing(false);
-
 
 }
 
@@ -98,33 +94,55 @@ setPublishing(false);
 
 
 
+
 if(!websiteData){
 
 
-return (
+return(
 
 <div
 
 className="
 min-h-screen
-bg-slate-950
+bg-black
 text-white
 flex
 items-center
 justify-center
-text-3xl
 "
 
 >
 
-No Website Generated 🤖
+<h1 className="
+text-2xl
+font-bold
+">
+
+No Website Generated
+
+</h1>
+
 
 </div>
 
 )
 
-
 }
+
+
+
+
+
+
+
+const liveUrl =
+
+`${websiteData.title
+?.toLowerCase()
+.replace(/\s+/g,"")
+}.digitallaunch.ai`;
+
+
 
 
 
@@ -139,13 +157,14 @@ return(
 
 className="
 min-h-screen
-bg-[#020617]
+bg-slate-950
 text-white
-p-4
-md:p-8
+overflow-x-hidden
 "
 
 >
+
+
 
 
 
@@ -153,22 +172,32 @@ md:p-8
 
 
 
+<header
+
+className="
+sticky
+top-0
+z-50
+bg-black/90
+backdrop-blur-xl
+border-b
+border-white/10
+"
+
+>
+
+
 <div
 
 className="
-bg-white/5
-border
-border-white/10
-backdrop-blur-xl
-rounded-3xl
-p-5
+max-w-7xl
+mx-auto
+px-5
+py-4
 flex
-flex-col
-md:flex-row
-justify-between
-gap-5
 items-center
-mb-8
+justify-between
+gap-4
 "
 
 >
@@ -177,35 +206,41 @@ mb-8
 
 <div>
 
+
 <h1
 
 className="
-text-3xl
-font-bold
+text-xl
+sm:text-2xl
+font-black
 "
 
 >
 
-🤖 DigitalLaunch AI
+🚀 DigitalLaunch AI
 
 </h1>
+
 
 
 <p
 
 className="
+text-xs
 text-gray-400
-mt-2
 "
 
 >
 
-AI Website Preview
+Website Preview
 
 </p>
 
 
+
 </div>
+
+
 
 
 
@@ -217,6 +252,7 @@ AI Website Preview
 
 className="
 flex
+items-center
 gap-3
 "
 
@@ -224,172 +260,24 @@ gap-3
 
 
 
-<button
-
-onClick={()=>setDevice("desktop")}
-
-className={`
-px-5
-py-2
-rounded-xl
-
-${
-device==="desktop"
-?
-"bg-blue-600"
-:
-"bg-white/10"
-}
-
-`}
-
->
-
-💻 Desktop
-
-</button>
-
-
-
-
-
 
 <button
 
-onClick={()=>setDevice("mobile")}
-
-className={`
-px-5
-py-2
-rounded-xl
-
-${
-device==="mobile"
-?
-"bg-blue-600"
-:
-"bg-white/10"
-}
-
-`}
-
->
-
-📱 Mobile
-
-</button>
-
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-
-
-
-
-<div
+onClick={()=>setRefresh(refresh+1)}
 
 className="
-grid
-lg:grid-cols-4
-gap-6
-"
-
->
-
-
-
-
-
-
-{/* AI PANEL */}
-
-
-
-<div
-
-className="
-bg-white/5
-border
-border-white/10
-rounded-3xl
-p-5
-h-fit
-"
-
->
-
-
-<h2
-
-className="
-text-xl
-font-bold
-"
-
->
-
-✨ AI Report
-
-</h2>
-
-
-
-
-<div
-
-className="
-space-y-3
-mt-5
-"
-
->
-
-
-{
-
-[
-"Business Analyzed",
-"Design Generated",
-"Content Created",
-"SEO Ready",
-"Mobile Friendly"
-
-].map((item,index)=>(
-
-
-<div
-
-key={index}
-
-className="
-bg-black/30
 p-3
 rounded-xl
+bg-white/10
+hover:bg-white/20
 "
 
 >
 
-✅ {item}
+<RefreshCcw size={18}/>
 
-</div>
+</button>
 
-
-))
-
-
-}
-
-
-
-</div>
 
 
 
@@ -402,14 +290,18 @@ rounded-xl
 <button
 
 className="
-mt-6
-w-full
+px-4
 py-3
 rounded-xl
 bg-white/10
+flex
+items-center
+gap-2
 "
 
 >
+
+<Pencil size={17}/>
 
 Edit
 
@@ -423,26 +315,31 @@ Edit
 
 
 
-<button
 
+
+
+<button
 
 onClick={handlePublish}
 
-
-disabled={publishing}
-
-
 className="
-mt-3
-w-full
+px-5
 py-3
 rounded-xl
-bg-yellow-500
+bg-gradient-to-r
+from-yellow-400
+to-orange-500
 text-black
-font-semibold
+font-bold
+flex
+items-center
+gap-2
 "
 
 >
+
+
+<Rocket size={18}/>
 
 
 {
@@ -455,7 +352,7 @@ publishing
 
 :
 
-"Publish 🚀"
+"Publish"
 
 }
 
@@ -464,82 +361,60 @@ publishing
 
 
 
+
+
+
 </div>
 
 
 
+</div>
+
+
+</header>
 
 
 
 
 
 
-{/* WEBSITE PREVIEW */}
 
 
 
-<div
+{/* WEBSITE URL */}
 
-className={`
-
-lg:col-span-3
-
-bg-white
-
-rounded-3xl
-
-overflow-hidden
-
-shadow-2xl
-
-text-black
-
-${
-device==="mobile"
-?
-"max-w-sm mx-auto w-full"
-:
-"w-full"
-}
-
-`}
-
->
-
-
-
-
-
-{/* Browser bar */}
 
 
 <div
 
 className="
-bg-gray-200
+max-w-7xl
+mx-auto
+px-5
+py-4
+"
+
+>
+
+
+<div
+
+className="
+bg-white
+text-gray-600
+rounded-full
 px-5
 py-3
-flex
-gap-2
-"
-
->
-
-🔴 🟡 🟢
-
-
-<p
-
-className="
-ml-3
+text-sm
 truncate
+text-center
 "
 
 >
 
-{websiteData.title}
+🌐 {liveUrl}
 
-</p>
+</div>
 
 
 </div>
@@ -551,37 +426,115 @@ truncate
 
 
 
-<motion.div
+
+{/* DESKTOP PREVIEW */}
 
 
-initial={{
 
-opacity:0,
-scale:.95
+<div
 
-}}
-
-
-animate={{
-
-opacity:1,
-scale:1
-
-}}
-
+className="
+max-w-[1400px]
+mx-auto
+px-5
+pb-10
+"
 
 >
+
+
+<div
+
+className="
+bg-white
+rounded-3xl
+overflow-hidden
+shadow-2xl
+"
+
+>
+
+
+
+{/* BROWSER TOP */}
+
+
+
+<div
+
+className="
+h-10
+bg-gray-200
+flex
+items-center
+gap-2
+px-5
+"
+
+>
+
+
+<span className="
+w-3
+h-3
+rounded-full
+bg-red-500
+"/>
+
+
+<span className="
+w-3
+h-3
+rounded-full
+bg-yellow-400
+"/>
+
+
+<span className="
+w-3
+h-3
+rounded-full
+bg-green-500
+"/>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+<div
+
+key={refresh}
+
+className="
+w-full
+overflow-x-hidden
+"
+
+>
+
 
 
 <TemplateRenderer
 
 websiteData={websiteData}
 
+preview={true}
+
 />
 
 
 
-</motion.div>
+</div>
+
 
 
 
@@ -590,12 +543,9 @@ websiteData={websiteData}
 </div>
 
 
-
-
-
-
-
 </div>
+
+
 
 
 
@@ -606,7 +556,6 @@ websiteData={websiteData}
 
 
 )
-
 
 }
 

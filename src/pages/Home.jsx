@@ -54,10 +54,9 @@ w-full
 
 onStart={()=>navigate("/builder")}
 
-onDemo={()=>navigate("/templates")}
+onDemo={()=>navigate("/#templates")}
 
 />
-
 
 
 

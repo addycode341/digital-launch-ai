@@ -12,11 +12,14 @@ import {
 
 
 
+
+
 const templates=[
 
 
 {
 emoji:"🧁",
+
 title:"Premium Bakery",
 
 desc:
@@ -31,14 +34,20 @@ features:[
 
 ],
 
-demo:"/bakery-demo"
+demo:"/bakery-demo",
+
+type:"bakery"
 
 },
 
 
 
+
+
+
 {
 emoji:"🏋️",
+
 title:"Fitness Pro",
 
 desc:
@@ -53,15 +62,20 @@ features:[
 
 ],
 
-demo:"/Gym-demo"
+demo:"/Gym-demo",
+
+type:"gym"
 
 },
 
 
 
 
+
+
 {
 emoji:"🍔",
+
 title:"Modern Restaurant",
 
 desc:
@@ -76,7 +90,9 @@ features:[
 
 ],
 
-demo:"#"
+demo:"#",
+
+type:"restaurant"
 
 },
 
@@ -84,8 +100,11 @@ demo:"#"
 
 
 
+
+
 {
 emoji:"🏥",
+
 title:"Medical Clinic",
 
 desc:
@@ -100,7 +119,9 @@ features:[
 
 ],
 
-demo:"#"
+demo:"#",
+
+type:"medical"
 
 },
 
@@ -109,8 +130,10 @@ demo:"#"
 
 
 
+
 {
 emoji:"🏠",
+
 title:"Real Estate",
 
 desc:
@@ -125,7 +148,9 @@ features:[
 
 ],
 
-demo:"/real-estate-demo"
+demo:"/real-estate-demo",
+
+type:"real estate"
 
 },
 
@@ -134,8 +159,10 @@ demo:"/real-estate-demo"
 
 
 
+
 {
 emoji:"🖨️",
+
 title:"Printing Business",
 
 desc:
@@ -150,14 +177,104 @@ features:[
 
 ],
 
-demo:"/printing-business"
+demo:"/printing-business",
+
+type:"printing"
+
+},
+
+
+
+
+
+
+
+{
+emoji:"📱",
+
+title:"Premium Mobile Store",
+
+desc:
+"Smartphone showroom website with products, offers and repair services",
+
+features:[
+
+"Product Showcase",
+"Latest Phones",
+"Repair Services",
+"Customer Reviews"
+
+],
+
+demo:"/mobile-store-demo",
+
+type:"mobile store"
+
+},
+
+
+
+
+
+
+
+{
+emoji:"💇",
+
+title:"Luxury Salon",
+
+desc:
+"Premium salon website with services, gallery and appointment booking",
+
+features:[
+
+"Beauty Services",
+"Gallery Section",
+"Team Profiles",
+"Booking Form"
+
+],
+
+demo:"/salon-demo",
+
+type:"salon"
+
+},
+
+
+
+
+
+
+
+{
+emoji:"🏨",
+
+title:"Luxury Hotel",
+
+desc:
+"Modern hotel website with rooms, amenities and booking enquiry",
+
+features:[
+
+"Room Showcase",
+"Amenities",
+"Gallery",
+"Booking System"
+
+],
+
+demo:"/hotel-demo",
+
+type:"hotel"
 
 }
 
 
 
-
 ];
+
+
 
 
 
@@ -172,6 +289,10 @@ return(
 
 
 <div>
+
+
+
+
 
 
 <div className="
@@ -192,9 +313,14 @@ justify-center
 text-purple-400
 ">
 
+
 <Sparkles/>
 
+
 </div>
+
+
+
 
 
 
@@ -212,6 +338,10 @@ Choose Your Website Design 🎨
 
 
 
+
+
+
+
 <p className="
 text-gray-400
 mt-3
@@ -222,6 +352,8 @@ Select a professional template and customize it with AI
 
 
 </p>
+
+
 
 
 </div>
@@ -241,11 +373,11 @@ gap-7
 ">
 
 
-
 {
 
 
 templates.map((template,index)=>(
+
 
 
 
@@ -256,7 +388,9 @@ key={index}
 
 
 whileHover={{
+
 y:-8
+
 }}
 
 
@@ -278,11 +412,16 @@ transition
 
 
 
+
+
+
+
 <div className="
 flex
 items-center
 gap-5
 ">
+
 
 
 <div className="
@@ -305,16 +444,26 @@ justify-center
 
 
 
+
+
+
+
 <div>
+
 
 <h2 className="
 text-2xl
 font-bold
 ">
 
+
 {template.title}
 
+
 </h2>
+
+
+
 
 
 <p className="
@@ -323,12 +472,17 @@ text-sm
 mt-2
 ">
 
+
 {template.desc}
+
 
 </p>
 
 
+
+
 </div>
+
 
 
 </div>
@@ -349,7 +503,9 @@ space-y-3
 
 {
 
+
 template.features.map((item,i)=>(
+
 
 
 <div
@@ -365,6 +521,7 @@ text-gray-300
 
 >
 
+
 <span className="
 text-green-400
 ">
@@ -375,6 +532,7 @@ text-green-400
 
 
 {item}
+
 
 
 </div>
@@ -405,11 +563,18 @@ mt-8
 ">
 
 
+
+
+
+
+
 <a
 
 href={template.demo}
 
 target="_blank"
+
+rel="noreferrer"
 
 className="
 flex-1
@@ -424,8 +589,8 @@ hover:bg-white/20
 transition
 "
 
-
 >
+
 
 
 <Eye size={18}/>
@@ -441,10 +606,13 @@ View Demo
 
 
 
+
+
+
 <button
 
 
-onClick={()=>onSelect(template.title)}
+onClick={()=>onSelect(template)}
 
 
 
@@ -477,7 +645,11 @@ Use Template
 
 
 
+
+
 </div>
+
+
 
 
 
@@ -487,6 +659,7 @@ Use Template
 </motion.div>
 
 
+
 ))
 
 
@@ -494,7 +667,12 @@ Use Template
 
 
 
+
 </div>
+
+
+
+
 
 
 </div>
@@ -504,6 +682,8 @@ Use Template
 
 
 }
+
+
 
 
 

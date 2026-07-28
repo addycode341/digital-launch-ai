@@ -84,7 +84,17 @@ tag:"Printing Business",
 desc:"Business cards, banners, stationery and custom printing.",
 link:"/printing-business"
 }
+,
 
+
+{
+    
+emoji:"🏨",
+title:"Hotel",
+tag:"Hospitality",
+desc:"Room booking, offers and premium hotel website.",
+link:"/hotel-demo"
+},
 
 
 ];

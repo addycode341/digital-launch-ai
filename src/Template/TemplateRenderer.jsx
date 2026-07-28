@@ -1,142 +1,145 @@
 import React from "react";
 
-
-// Templates
-
 import BakeryWebsite from "./Bakery/BakeryWebsite";
 import PrintingBusiness from "./PrintingBusiness/PrintingBusiness";
 import RealEstate from "./real-estate/RealEstate";
+import RestaurantWebsite from "./Restaurant/RestaurantWebsite";
+import GymWebsite from "./Gym/GymWebsite";
+import SalonWebsite from "./Salon/SalonWebsite";
+import HotelWebsite from "./Hotel/HotelWebsite";
+import MobileStoreWebsite from "./MobileStore/MobileStoreWebsite";
 
-// Future
-// import GymWebsite from "./Gym/GymWebsite";
 
+const templates = {
 
+bakery: BakeryWebsite,
 
-function TemplateRenderer({ websiteData }) {
+printing: PrintingBusiness,
+"printing business": PrintingBusiness,
+"printing-business": PrintingBusiness,
 
 
+"real estate": RealEstate,
+realestate: RealEstate,
+"real-estate": RealEstate,
 
-  if(!websiteData){
 
-    return (
+restaurant: RestaurantWebsite,
 
-      <div className="text-center text-gray-400">
 
-        No Website Data Found
+gym: GymWebsite,
+fitness: GymWebsite,
+"fitness gym": GymWebsite,
 
-      </div>
 
-    );
+salon: SalonWebsite,
+beauty: SalonWebsite,
+"beauty salon": SalonWebsite,
 
-  }
 
+hotel: HotelWebsite,
+resort: HotelWebsite,
 
 
+"mobile store": MobileStoreWebsite,
+mobilestore: MobileStoreWebsite,
+mobile: MobileStoreWebsite,
+"mobile-store": MobileStoreWebsite
 
-  const type = websiteData.businessType
-  ?.toLowerCase();
+};
 
 
 
 
 
-  switch(type){
+function TemplateRenderer({websiteData, preview=false}){
 
 
+if(!websiteData){
 
-    case "bakery":
+return(
 
-      return (
+<div className="
+min-h-screen
+flex
+items-center
+justify-center
+bg-black
+text-white
+">
 
-        <BakeryWebsite 
-        data={websiteData}
-        />
+No Website Data Found
 
-      );
+</div>
 
+)
 
+}
 
 
 
-    case "printing":
+const type =
+websiteData?.businessType
+?.toLowerCase()
+?.trim();
 
-      return (
 
-        <PrintingBusiness
-        data={websiteData}
-        />
 
-      );
+const Template = templates[type];
 
 
 
+if(!Template){
 
+return(
 
+<div className="
+min-h-[500px]
+flex
+items-center
+justify-center
+bg-black
+text-white
+">
 
+Template Coming Soon
 
-    case "real estate":
+</div>
 
-    case "realestate":
+)
 
-    case "real-estate":
+}
 
 
-      return (
 
-        <RealEstate
 
-        data={websiteData}
 
-        />
+return(
 
-      );
+<div
 
+className="
+w-full
+overflow-x-hidden
+bg-black
+"
 
+>
 
 
+<Template
 
+data={websiteData}
 
+preview={preview}
 
+/>
 
-    // Future Template
 
+</div>
 
-    // case "gym":
 
-    // return <GymWebsite data={websiteData}/>
-
-
-
-
-
-
-
-    default:
-
-
-      return (
-
-        <div
-
-        className="
-        text-center
-        py-20
-        text-white
-        "
-
-        >
-
-          Template Not Available
-
-
-        </div>
-
-      );
-
-
-
-  }
-
+)
 
 
 }
