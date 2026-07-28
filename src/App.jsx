@@ -1,9 +1,8 @@
 import {
-BrowserRouter,
-Routes,
-Route
+  BrowserRouter,
+  Routes,
+  Route
 } from "react-router-dom";
-
 
 
 // PUBLIC
@@ -16,18 +15,16 @@ import Payment from "./pages/Payment";
 
 
 
-
 // USER DASHBOARD
 
 import Dashboard from "./pages/Dashboard";
 import Builder from "./pages/Builder";
 import Preview from "./pages/Preview";
-import Analytics from "./pages/Aanalytics";
+import Analytics from "./pages/Analytics";
 import SEOReport from "./pages/SEOReport";
-import UserLeads from "./pages/leads";
-import Settings from "./pages/settings";
+import UserLeads from "./pages/Leads";
+import Settings from "./pages/Settings";
 import MyWebsites from "./pages/MyWebsites";
-
 
 
 
@@ -39,25 +36,20 @@ import FeatureRoute from "./components/FeatureRoute";
 
 
 
-
-
 // ADMIN
 
-import AdminLogin from "./pages/admin/AdminLogin";
-import AdminDashboard from "./pages/admin/AdminDashboard";
-import Clients from "./pages/admin/Clients";
-import Websites from "./pages/admin/Websites";
-import AdminAnalytics from "./pages/admin/Analytics";
-import AdminPreview from "./pages/admin/AdminPreview";
-import ClientDetail from "./pages/admin/ClientDetail";
-import Payments from "./pages/admin/Payments";
-import Leads from "./pages/admin/Leads";
+import AdminLogin from "./pages/Admin/AdminLogin";
+import AdminDashboard from "./pages/Admin/AdminDashboard";
+import Clients from "./pages/Admin/Clients";
+import Websites from "./pages/Admin/Websites";
+import AdminAnalytics from "./pages/Admin/Analytics";
+import AdminPreview from "./pages/Admin/AdminPreview";
+import ClientDetail from "./pages/Admin/ClientDetail";
+import Payments from "./pages/Admin/Payments";
+import Leads from "./pages/Admin/Leads";
 
 import AdminProtectedRoute from "./components/AdminProtectedRoute";
-import AdminLayout from "./pages/admin/AdminLayout";
-
-
-
+import AdminLayout from "./pages/Admin/AdminLayout";
 
 
 
@@ -71,79 +63,38 @@ import RealEstate from "./Template/real-estate/RealEstate";
 
 
 
-
-
-
-
 function App(){
-
 
 return(
 
-
 <BrowserRouter>
-
 
 <Routes>
 
 
+{/* PUBLIC */}
 
+<Route path="/" element={<Home/>}/>
 
+<Route path="/login" element={<Login/>}/>
 
-{/* ================= PUBLIC ================= */}
+<Route path="/signup" element={<Signup/>}/>
 
+<Route path="/payment" element={<Payment/>}/>
 
-
-<Route
-path="/"
-element={<Home/>}
-/>
-
-
-
-<Route
-path="/login"
-element={<Login/>}
-/>
-
-
-
-<Route
-path="/signup"
-element={<Signup/>}
-/>
-
-
-
-<Route
-path="/payment"
-element={<Payment/>}
-/>
-
-
-
-<Route
+<Route 
 path="/website/:slug"
 element={<PublicWebsite/>}
 />
 
 
 
-
-
-
-
-
-
-{/* ================= DEMO ================= */}
-
-
+{/* DEMO */}
 
 <Route
 path="/bakery-demo"
 element={<BakeryWebsite/>}
 />
-
 
 
 <Route
@@ -152,12 +103,10 @@ element={<PrintingBusiness/>}
 />
 
 
-
 <Route
 path="/Gym-demo"
 element={<Gym/>}
 />
-
 
 
 <Route
@@ -169,17 +118,10 @@ element={<RealEstate/>}
 
 
 
-
-
-
-
-{/* ================= USER DASHBOARD ================= */}
-
-
+{/* USER DASHBOARD */}
 
 
 <Route
-
 
 element={
 
@@ -191,73 +133,34 @@ element={
 
 }
 
-
-
 >
 
 
-
 <Route
-
 path="/dashboard"
-
 element={<Dashboard/>}
-
 />
 
 
 
-
-
-
-
-{/* Builder available after signup */}
-
-
-
 <Route
-
 path="/builder"
-
 element={<Builder/>}
-
 />
 
 
 
-
-
 <Route
-
 path="/builder/:id"
-
 element={<Builder/>}
-
 />
-
-
-
 
 
 
 <Route
-
 path="/preview"
-
 element={<Preview/>}
-
 />
-
-
-
-
-
-
-
-
-
-{/* Premium Features */}
-
 
 
 
@@ -279,10 +182,6 @@ element={
 
 
 
-
-
-
-
 <Route
 
 path="/seo-report"
@@ -298,11 +197,6 @@ element={
 }
 
 />
-
-
-
-
-
 
 
 
@@ -324,35 +218,17 @@ element={
 
 
 
-
-
-
-
-
 <Route
-
 path="/settings"
-
 element={<Settings/>}
-
 />
-
-
-
-
 
 
 
 <Route
-
 path="/my-websites"
-
 element={<MyWebsites/>}
-
 />
-
-
-
 
 
 </Route>
@@ -362,15 +238,7 @@ element={<MyWebsites/>}
 
 
 
-
-
-
-
-
-
-{/* ================= ADMIN LOGIN ================= */}
-
-
+{/* ADMIN LOGIN */}
 
 <Route
 
@@ -384,20 +252,10 @@ element={<AdminLogin/>}
 
 
 
-
-
-
-
-
-
-{/* ================= ADMIN PANEL ================= */}
-
-
-
+{/* ADMIN PANEL */}
 
 
 <Route
-
 
 element={
 
@@ -409,118 +267,67 @@ element={
 
 }
 
-
 >
 
 
-
 <Route
-
 path="/admin"
-
 element={<AdminDashboard/>}
-
 />
 
 
-
-
 <Route
-
 path="/admin/clients"
-
 element={<Clients/>}
-
 />
 
 
-
-
 <Route
-
 path="/admin/client/:id"
-
 element={<ClientDetail/>}
-
 />
 
 
-
-
 <Route
-
 path="/admin/websites"
-
 element={<Websites/>}
-
 />
 
 
-
-
 <Route
-
 path="/admin/payments"
-
 element={<Payments/>}
-
 />
 
 
-
-
 <Route
-
 path="/admin/leads"
-
 element={<Leads/>}
-
 />
 
 
-
-
 <Route
-
 path="/admin/analytics"
-
 element={<AdminAnalytics/>}
-
 />
-
-
 
 
 <Route
-
 path="/admin/preview/:id"
-
 element={<AdminPreview/>}
-
 />
-
-
 
 
 </Route>
 
 
-
-
-
-
-
 </Routes>
-
 
 </BrowserRouter>
 
-
 )
-
 
 }
 
 
-
-export default App;
+export default App; 
