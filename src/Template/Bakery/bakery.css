@@ -1,0 +1,265 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+
+
+.bakery-theme{
+
+font-family:
+'Poppins',
+sans-serif;
+
+background:#FFF9F3;
+
+color:#2B160F;
+
+overflow-x:hidden;
+
+}
+
+
+
+
+
+.bakery-theme h1,
+.bakery-theme h2,
+.bakery-theme h3{
+
+font-family:
+'Playfair Display',
+serif;
+
+}
+
+
+
+
+
+html{
+
+scroll-behavior:smooth;
+
+}
+
+
+
+section {
+  scroll-margin-top: 90px;
+}
+
+::selection{
+
+background:#C89B5B;
+
+color:white;
+
+}
+
+
+
+
+
+
+
+/* scrollbar */
+
+
+::-webkit-scrollbar{
+
+width:10px;
+
+}
+
+
+
+::-webkit-scrollbar-track{
+
+background:#FFF3E6;
+
+}
+
+
+
+::-webkit-scrollbar-thumb{
+
+background:#4A2518;
+
+border-radius:20px;
+
+}
+
+
+
+
+
+/* images */
+
+
+.bakery-theme img{
+
+user-select:none;
+
+}
+
+
+
+.bakery-theme img:hover{
+
+filter:
+brightness(1.05);
+
+}
+
+
+
+
+
+/* buttons */
+
+
+.bakery-theme button,
+.bakery-theme a{
+
+transition:
+
+all .3s ease;
+
+}
+
+
+
+
+
+
+/* floating animation */
+
+
+.float-animation{
+
+animation:
+
+float 4s ease-in-out infinite;
+
+}
+
+
+
+@keyframes float{
+
+
+0%{
+
+transform:translateY(0);
+
+}
+
+
+50%{
+
+transform:translateY(-15px);
+
+}
+
+
+100%{
+
+transform:translateY(0);
+
+}
+
+
+}
+
+
+
+
+
+
+
+/* card hover */
+
+
+.bakery-card{
+
+transition:
+
+transform .4s ease,
+box-shadow .4s ease;
+
+}
+
+
+
+.bakery-card:hover{
+
+transform:
+
+translateY(-10px);
+
+
+box-shadow:
+
+0 25px 50px rgba(74,37,24,.15);
+
+}
+
+
+
+
+
+
+
+
+/* glass effect */
+
+
+.bakery-glass{
+
+
+background:
+
+rgba(255,255,255,.75);
+
+
+backdrop-filter:
+
+blur(20px);
+
+
+border:
+
+1px solid rgba(232,211,181,.6);
+
+
+}
+
+
+
+
+
+
+
+
+/* mobile */
+
+
+@media(max-width:768px){
+
+
+
+.bakery-theme h1{
+
+font-size:42px;
+
+}
+
+
+
+.bakery-theme h2{
+
+font-size:36px;
+
+}
+
+
+
+}
