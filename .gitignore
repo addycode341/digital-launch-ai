@@ -22,3 +22,12 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+# Environment Variables
+.env
+server/.env
+
+# Firebase Admin Secret
+serviceAccountKey.json
+server/serviceAccountKey.json
+
+# Firebase credentials
