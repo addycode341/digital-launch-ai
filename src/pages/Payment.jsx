@@ -22,7 +22,7 @@ const [loading,setLoading] = useState(false);
 
 
 
-const API_URL = "http://localhost:5000";
+const API_URL = "https://digital-launch-ai.onrender.com";
 
 
 
