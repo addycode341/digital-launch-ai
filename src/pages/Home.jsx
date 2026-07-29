@@ -20,6 +20,26 @@ const navigate = useNavigate();
 
 
 
+const scrollTemplates = ()=>{
+
+const section =
+document.getElementById("templates");
+
+
+if(section){
+
+section.scrollIntoView({
+
+behavior:"smooth"
+
+});
+
+}
+
+};
+
+
+
 return(
 
 
@@ -34,7 +54,6 @@ overflow-x-hidden
 "
 
 >
-
 
 
 <Navbar />
@@ -54,7 +73,7 @@ w-full
 
 onStart={()=>navigate("/builder")}
 
-onDemo={()=>navigate("/#templates")}
+onDemo={scrollTemplates}
 
 />
 
@@ -94,16 +113,11 @@ onDemo={()=>navigate("/#templates")}
 
 
 
-
 <Footer />
 
 
 
-
-
 <WhatsAppWidget />
-
-
 
 
 
