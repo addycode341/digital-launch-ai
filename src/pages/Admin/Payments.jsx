@@ -1,4 +1,4 @@
-import React, {
+import React,{
 useEffect,
 useState
 } from "react";
@@ -21,14 +21,14 @@ import {
 CreditCard,
 CheckCircle,
 Clock,
-IndianRupee
+IndianRupee,
+XCircle
 } from "lucide-react";
 
 
 import {
 motion
 } from "framer-motion";
-
 
 
 
@@ -45,13 +45,14 @@ const [loading,setLoading]=useState(true);
 
 
 
-useEffect(()=>{
 
+
+useEffect(()=>{
 
 loadPayments();
 
-
 },[]);
+
 
 
 
@@ -65,7 +66,7 @@ const loadPayments=async()=>{
 try{
 
 
-const q = query(
+const q=query(
 
 collection(
 db,
@@ -81,9 +82,7 @@ orderBy(
 
 
 
-
-
-const snap = await getDocs(q);
+const snap=await getDocs(q);
 
 
 
@@ -91,14 +90,17 @@ let data=[];
 
 
 
-snap.forEach(doc=>{
+snap.forEach(item=>{
+
+
+const payment=item.data();
 
 
 data.push({
 
-id:doc.id,
+id:item.id,
 
-...doc.data()
+...payment
 
 });
 
@@ -115,23 +117,47 @@ setPayments(data);
 
 catch(error){
 
-
-console.log(error);
+console.log(
+"Payment Error",
+error
+);
 
 
 }
 
 finally{
 
-
 setLoading(false);
-
 
 }
 
 
 };
 
+
+
+
+
+
+
+
+
+
+const revenue = payments.reduce(
+
+(total,item)=>{
+
+
+return total + Number(
+item.amount || 0
+);
+
+
+},
+
+0
+
+);
 
 
 
@@ -147,21 +173,20 @@ return(
 
 <div className="
 min-h-screen
-text-white
 flex
 items-center
 justify-center
+text-white
 ">
 
 Loading Payments...
-
 
 </div>
 
 )
 
-}
 
+}
 
 
 
@@ -178,9 +203,6 @@ return(
 text-white
 space-y-10
 ">
-
-
-
 
 
 <div>
@@ -201,7 +223,7 @@ text-gray-400
 mt-2
 ">
 
-Manage customer subscriptions and revenue
+Manage customer payments
 
 </p>
 
@@ -213,10 +235,6 @@ Manage customer subscriptions and revenue
 
 
 
-
-
-
-{/* SUMMARY */}
 
 
 
@@ -228,8 +246,6 @@ gap-6
 
 
 
-
-
 <div className="
 bg-white/5
 border
@@ -238,24 +254,22 @@ rounded-3xl
 p-6
 ">
 
-
 <CreditCard
 className="text-purple-400"
 />
 
 
-<h3 className="
+<p className="
 text-gray-400
 mt-4
 ">
 
 Total Payments
 
-</h3>
+</p>
 
 
-
-<p className="
+<h2 className="
 text-3xl
 font-bold
 mt-2
@@ -263,11 +277,10 @@ mt-2
 
 {payments.length}
 
-</p>
+</h2>
 
 
 </div>
-
 
 
 
@@ -283,56 +296,83 @@ border-white/10
 rounded-3xl
 p-6
 ">
-
 
 <IndianRupee
 className="text-green-400"
 />
 
 
-<h3 className="
+<p className="
 text-gray-400
 mt-4
 ">
 
 Revenue
 
-</h3>
+</p>
 
 
-
-<p className="
+<h2 className="
 text-3xl
 font-bold
 mt-2
 ">
 
-₹
-{
+₹{revenue}
 
-payments.reduce(
-
-(total,item)=>{
+</h2>
 
 
-let amount = 
-Number(
-item.amount?.replace("₹","")
-);
+</div>
 
 
-return total + (amount || 0);
 
 
-},
 
-0
 
-)
 
-}
+<div className="
+bg-white/5
+border
+border-white/10
+rounded-3xl
+p-6
+">
+
+<CheckCircle
+className="text-blue-400"
+/>
+
+
+<p className="
+text-gray-400
+mt-4
+">
+
+Successful
 
 </p>
+
+
+<h2 className="
+text-3xl
+font-bold
+mt-2
+">
+
+{
+payments.filter(
+p=>p.status==="success"
+).length
+}
+
+</h2>
+
+
+</div>
+
+
+
 
 
 </div>
@@ -350,76 +390,9 @@ bg-white/5
 border
 border-white/10
 rounded-3xl
-p-6
-">
-
-
-<CheckCircle
-className="text-blue-400"
-/>
-
-
-<h3 className="
-text-gray-400
-mt-4
-">
-
-Successful
-
-</h3>
-
-
-
-<p className="
-text-3xl
-font-bold
-mt-2
-">
-
-{
-
-payments.filter(
-
-p=>p.status==="success"
-
-).length
-
-}
-
-</p>
-
-
-</div>
-
-
-
-
-
-
-
-</div>
-
-
-
-
-
-
-
-
-
-{/* PAYMENT TABLE */}
-
-
-
-<div className="
-bg-white/[0.05]
-border
-border-white/10
-rounded-3xl
 p-8
 overflow-x-auto
 ">
-
 
 
 <h2 className="
@@ -436,21 +409,24 @@ Payment History
 
 
 
-
 <table className="
 w-full
 text-left
 ">
 
 
-
 <thead>
 
 <tr className="
-text-gray-400
 border-b
 border-white/10
+text-gray-400
 ">
+
+
+<th className="p-4">
+Customer
+</th>
 
 
 <th className="p-4">
@@ -475,6 +451,7 @@ Date
 
 </tr>
 
+
 </thead>
 
 
@@ -497,16 +474,13 @@ key={payment.id}
 
 
 initial={{
-opacity:0,
-y:20
+opacity:0
 }}
 
 
 animate={{
-opacity:1,
-y:0
+opacity:1
 }}
-
 
 
 transition={{
@@ -514,11 +488,11 @@ delay:index*0.05
 }}
 
 
-
 className="
 border-b
 border-white/10
 "
+
 
 >
 
@@ -526,14 +500,27 @@ border-white/10
 <td className="p-4">
 
 
-<div className="
+<h3 className="
 font-semibold
 ">
 
-{payment.planName}
+{
+payment.name || "Customer"
+}
 
-</div>
+</h3>
 
+
+<p className="
+text-gray-400
+text-sm
+">
+
+{
+payment.email || "-"
+}
+
+</p>
 
 
 </td>
@@ -543,10 +530,31 @@ font-semibold
 
 
 
-<td className="p-4 font-bold">
+
+<td className="p-4">
 
 
-{payment.amount}
+{
+payment.planName || "Starter"
+}
+
+
+</td>
+
+
+
+
+
+
+
+<td className="
+p-4
+font-bold
+text-green-400
+">
+
+
+₹{payment.amount}
 
 
 </td>
@@ -570,8 +578,8 @@ payment.status==="success"
 
 <span className="
 flex
-items-center
 gap-2
+items-center
 text-green-400
 ">
 
@@ -582,13 +590,38 @@ Success
 </span>
 
 
+
+:
+
+
+payment.status==="failed"
+
+
+?
+
+
+<span className="
+flex
+gap-2
+items-center
+text-red-400
+">
+
+<XCircle size={18}/>
+
+Failed
+
+</span>
+
+
+
 :
 
 
 <span className="
 flex
-items-center
 gap-2
+items-center
 text-yellow-400
 ">
 
@@ -611,26 +644,30 @@ Pending
 
 
 
-
-<td className="p-4 text-gray-400">
+<td className="
+p-4
+text-gray-400
+">
 
 
 {
 
-payment.createdAt?.toDate()
+payment.createdAt?.toDate
 
+?
+
+payment.createdAt.toDate()
 .toLocaleDateString()
 
-||
+:
 
 "-"
-
 
 }
 
 
-
 </td>
+
 
 
 
@@ -655,16 +692,13 @@ payment.createdAt?.toDate()
 
 
 
-
-
-
 {
 
 payments.length===0 &&
 
 <div className="
-text-gray-400
 text-center
+text-gray-400
 py-10
 ">
 
@@ -677,27 +711,19 @@ No Payments Found
 
 
 
-
-
 </div>
 
 
 
 
 
-
-
-
 </div>
-
 
 
 )
 
 
-
 }
-
 
 
 export default Payments;

@@ -1,86 +1,85 @@
-    import {
-    useEffect,
-    useState
-    } from "react";
+import {
+useEffect,
+useState
+} from "react";
 
 
-    import {
-    useParams,
-    useNavigate
-    } from "react-router-dom";
+import {
+useParams,
+useNavigate
+} from "react-router-dom";
 
 
-    import {
-    collection,
-    getDocs,
-    doc,
-    getDoc,
-    updateDoc
-    } from "firebase/firestore";
+import {
+collection,
+getDocs,
+doc,
+getDoc,
+updateDoc
+} from "firebase/firestore";
 
 
-    import {
-    db
-    } from "../../firebase";
+import {
+db
+} from "../../firebase";
 
 
-    import {
-    Monitor,
-    Smartphone,
-    ArrowLeft,
-    Edit,
-    Rocket,
-    CheckCircle
-    } from "lucide-react";
+import {
+Monitor,
+Smartphone,
+ArrowLeft,
+Edit,
+Rocket
+} from "lucide-react";
 
 
 
-    import Hero from "../../components/website/Hero";
-    import About from "../../components/website/About";
-    import Gallery from "../../components/website/Gallery";
-    import Features from "../../components/website/Features";
-    import Services from "../../components/website/Services";
-    import Pricing from "../../components/website/Pricing";
-    import Testimonials from "../../components/website/Testimonials";
-    import FAQ from "../../components/website/FAQ";
-    import Contact from "../../components/website/Contact";
-    import LeadForm from "../../components/website/LeadForm";
-    import Footer from "../../components/website/Footer";
+import Hero from "../../components/website/Hero";
+import About from "../../components/website/About";
+import Gallery from "../../components/website/Gallery";
+import Features from "../../components/website/Features";
+import Services from "../../components/website/Services";
+import Pricing from "../../components/website/Pricing";
+import Testimonials from "../../components/website/Testimonials";
+import FAQ from "../../components/website/FAQ";
+import Contact from "../../components/website/Contact";
+import LeadForm from "../../components/website/LeadForm";
+import Footer from "../../components/website/Footer";
 
 
 
 
 
-    const AdminPreview =()=>{
+const AdminPreview =()=>{
 
 
-    const {id}=useParams();
+const {id}=useParams();
 
-    const navigate=useNavigate();
+const navigate=useNavigate();
 
 
 
-    const [website,setWebsite]=useState(null);
+const [website,setWebsite]=useState(null);
 
-    const [loading,setLoading]=useState(true);
+const [loading,setLoading]=useState(true);
 
+const [mode,setMode]=useState("desktop");
 
-    const [mode,setMode]=useState("desktop");
+const [updating,setUpdating]=useState(false);
 
-    const [updating,setUpdating]=useState(false);
 
 
 
 
 
 
+useEffect(()=>{
 
+fetchWebsite();
 
-    useEffect(()=>{
+},[]);
 
-    fetchWebsite();
 
-    },[]);
 
 
 
@@ -88,263 +87,245 @@
 
 
 
+const fetchWebsite=async()=>{
 
 
-    const fetchWebsite=async()=>{
+try{
 
 
-    try{
+const usersSnap = await getDocs(
 
+collection(
+db,
+"users"
+)
 
-    const usersSnap = await getDocs(
+);
 
-    collection(db,"users")
 
-    );
 
+let found=null;
 
 
-    let found=null;
 
+for(const user of usersSnap.docs){
 
 
-    for(const user of usersSnap.docs){
 
+const ref = doc(
 
+db,
 
-    const websiteRef = doc(
+"users",
 
-    db,
+user.id,
 
-    "users",
+"websites",
 
-    user.id,
+id
 
-    "websites",
+);
 
-    id
 
-    );
 
+const snap = await getDoc(ref);
 
 
-    const websiteSnap = await getDoc(
-    websiteRef
-    );
 
 
 
+if(snap.exists()){
 
 
-    if(websiteSnap.exists()){
+const data=snap.data();
 
 
-    const data=websiteSnap.data();
+const websiteData =
+data.websiteData || {};
 
 
 
-    found={
 
-    ...data.websiteData,
+found={
 
-    title:data.title || data.websiteData?.title,
 
-    status:data.status || "draft",
 
-    ownerId:user.id,
+...websiteData,
 
-    websiteId:id
 
 
-    };
+title:
 
+data.title ||
 
+websiteData.title ||
 
-    break;
+"Untitled Website",
 
 
-    }
 
 
+template:
 
-    }
+typeof websiteData.template==="object"
 
+?
 
+websiteData.template?.title || "Business"
 
-    setWebsite(found);
+:
 
+websiteData.template || "Business",
 
 
-    }
 
-    catch(error){
 
-    console.log(error);
+status:
 
-    }
+data.status || "draft",
 
-    finally{
 
-    setLoading(false);
 
-    }
 
+ownerId:user.id,
 
 
-    };
+websiteId:id
 
 
 
+};
 
 
 
+break;
 
 
+}
 
-    const changeStatus=async()=>{
 
 
-    try{
 
+}
 
-    setUpdating(true);
 
 
+setWebsite(found);
 
-    const ref = doc(
 
-    db,
 
-    "users",
+}
 
-    website.ownerId,
+catch(error){
 
-    "websites",
+console.log(
+"Preview Error",
+error
+);
 
-    website.websiteId
+}
 
-    );
+finally{
 
+setLoading(false);
 
+}
 
-    await updateDoc(ref,{
 
-    status:
 
-    website.status==="published"
+};
 
-    ?
 
-    "draft"
 
-    :
 
-    "published"
 
-    });
 
 
 
 
+const changeStatus=async()=>{
 
-    setWebsite({
 
-    ...website,
+try{
 
-    status:
 
-    website.status==="published"
+setUpdating(true);
 
-    ?
 
-    "draft"
 
-    :
+const ref = doc(
 
-    "published"
+db,
 
-    });
+"users",
 
+website.ownerId,
 
+"websites",
 
-    }
+website.websiteId
 
-    catch(error){
+);
 
-    console.log(error);
 
-    }
 
-    finally{
 
-    setUpdating(false);
 
-    }
+const newStatus =
 
+website.status==="published"
 
+?
 
-    };
+"draft"
 
+:
 
+"published";
 
 
 
 
 
+await updateDoc(ref,{
 
+status:newStatus
 
-    if(loading){
+});
 
 
-    return(
 
-    <div className="
-    min-h-screen
-    bg-[#050816]
-    text-white
-    flex
-    items-center
-    justify-center
-    text-xl
-    ">
 
-    Loading Preview 🚀
 
-    </div>
+setWebsite({
 
-    )
+...website,
 
-    }
+status:newStatus
 
+});
 
 
 
 
+}
 
+catch(error){
 
+console.log(error);
 
-    if(!website){
+}
 
+finally{
 
-    return(
+setUpdating(false);
 
-    <div className="
-    min-h-screen
-    bg-[#050816]
-    text-white
-    flex
-    items-center
-    justify-center
-    text-xl
-    ">
+}
 
-    Website Not Found ❌
 
-    </div>
 
-    )
+};
 
-    }
 
 
 
@@ -353,428 +334,466 @@
 
 
 
-    return(
+if(loading){
 
 
-    <div className="
-    min-h-screen
-    bg-white
-    ">
+return(
 
+<div className="
+min-h-screen
+bg-[#050816]
+text-white
+flex
+items-center
+justify-center
+text-xl
+">
 
+Loading Preview 🚀
 
+</div>
 
+)
 
+}
 
-    {/* ADMIN TOOLBAR */}
 
 
 
-    <div className="
-    sticky
-    top-0
-    z-50
-    bg-[#050816]
-    text-white
-    px-6
-    py-4
-    flex
-    justify-between
-    items-center
-    border-b
-    border-white/10
-    ">
 
 
 
 
 
-    <div>
+if(!website){
 
 
-    <h1 className="
-    font-bold
-    text-xl
-    ">
+return(
 
-    🚀 DigitalLaunch AI Preview
+<div className="
+min-h-screen
+bg-[#050816]
+text-white
+flex
+items-center
+justify-center
+text-xl
+">
 
-    </h1>
+Website Not Found ❌
 
+</div>
 
-    <div className="
-    flex
-    items-center
-    gap-3
-    mt-1
-    ">
+)
 
+}
 
-    <p className="
-    text-gray-400
-    text-sm
-    ">
 
-    {website.title}
 
-    </p>
 
 
 
+return(
 
-    <span className={
 
-    `
-    text-xs
-    px-3
-    py-1
-    rounded-full
+<div className="
+min-h-screen
+bg-white
+">
 
-    ${
-    website.status==="published"
 
-    ?
 
-    "bg-green-500/20 text-green-400"
+{/* TOOLBAR */}
 
-    :
 
-    "bg-yellow-500/20 text-yellow-400"
+<div className="
+sticky
+top-0
+z-50
+bg-[#050816]
+text-white
+px-4
+lg:px-6
+py-4
+flex
+flex-col
+lg:flex-row
+gap-4
+justify-between
+items-center
+border-b
+border-white/10
+">
 
-    }
 
-    `
 
-    }>
 
 
-    {website.status}
+<div>
 
 
-    </span>
+<h1 className="
+font-bold
+text-lg
+lg:text-xl
+">
 
+🚀 DigitalLaunch AI Preview
 
+</h1>
 
-    </div>
 
 
+<div className="
+flex
+items-center
+gap-3
+mt-2
+">
 
-    </div>
 
+<p className="
+text-gray-400
+text-sm
+">
 
+{website.title}
 
+</p>
 
 
 
+<span
 
-    <div className="
-    flex
-    gap-3
-    items-center
-    ">
+className={
 
+`
 
+text-xs
+px-3
+py-1
+rounded-full
 
 
+${
 
-    <button
+website.status==="published"
 
-    onClick={()=>setMode("desktop")}
+?
 
-    className={
+"bg-green-500/20 text-green-400"
 
-    `
-    p-3
-    rounded-xl
+:
 
-    ${
-    mode==="desktop"
+"bg-yellow-500/20 text-yellow-400"
 
-    ?
+}
 
-    "bg-purple-600"
+`
 
-    :
+}
 
-    "bg-white/10"
+>
 
-    }
+{website.status}
 
-    `
+</span>
 
-    }
 
-    >
 
+</div>
 
-    <Monitor size={20}/>
 
+</div>
 
-    </button>
 
 
 
 
+<div className="
+flex
+gap-2
+flex-wrap
+justify-center
+">
 
 
 
-    <button
+<button
 
-    onClick={()=>setMode("mobile")}
+onClick={()=>setMode("desktop")}
 
-    className={
+className={`
 
-    `
-    p-3
-    rounded-xl
+p-3
+rounded-xl
 
-    ${
-    mode==="mobile"
+${
 
-    ?
+mode==="desktop"
 
-    "bg-purple-600"
+?
 
-    :
+"bg-purple-600"
 
-    "bg-white/10"
+:
 
-    }
+"bg-white/10"
 
-    `
+}
 
-    }
+`}
 
-    >
+>
 
 
-    <Smartphone size={20}/>
+<Monitor size={20}/>
 
 
-    </button>
+</button>
 
 
 
 
 
+<button
 
+onClick={()=>setMode("mobile")}
 
-    <button
+className={`
 
-    onClick={changeStatus}
+p-3
+rounded-xl
 
-    disabled={updating}
+${
 
-    className="
-    flex
-    items-center
-    gap-2
-    bg-green-600
-    px-5
-    py-3
-    rounded-xl
-    "
+mode==="mobile"
 
+?
 
-    >
+"bg-purple-600"
 
+:
 
-    <Rocket size={18}/>
+"bg-white/10"
 
+}
 
-    {
+`}
 
-    website.status==="published"
+>
 
-    ?
 
-    "Unpublish"
+<Smartphone size={20}/>
 
-    :
 
-    "Publish"
+</button>
 
-    }
 
 
-    </button>
 
 
+<button
 
+onClick={changeStatus}
 
+disabled={updating}
 
+className="
+flex
+items-center
+gap-2
+bg-green-600
+px-4
+py-3
+rounded-xl
+text-sm
+"
 
-    <button
+>
 
-    onClick={()=>navigate(`/admin/edit/${id}`)}
 
-    className="
-    flex
-    items-center
-    gap-2
-    bg-blue-600
-    px-5
-    py-3
-    rounded-xl
-    "
+<Rocket size={18}/>
 
 
-    >
+{
 
+website.status==="published"
 
-    <Edit size={18}/>
+?
 
-    Edit
+"Unpublish"
 
+:
 
-    </button>
+"Publish"
 
+}
 
 
 
+</button>
 
 
 
-    <button
 
-    onClick={()=>navigate(-1)}
 
-    className="
-    flex
-    items-center
-    gap-2
-    bg-white/10
-    px-5
-    py-3
-    rounded-xl
-    "
+<button
 
+onClick={()=>navigate(`/admin/edit/${id}`)}
 
-    >
+className="
+flex
+items-center
+gap-2
+bg-blue-600
+px-4
+py-3
+rounded-xl
+text-sm
+"
 
+>
 
-    <ArrowLeft size={18}/>
 
-    Back
+<Edit size={18}/>
 
+Edit
 
-    </button>
 
+</button>
 
 
 
-    </div>
 
 
+<button
 
-    </div>
+onClick={()=>navigate(-1)}
 
+className="
+flex
+items-center
+gap-2
+bg-white/10
+px-4
+py-3
+rounded-xl
+text-sm
+"
 
+>
 
 
+<ArrowLeft size={18}/>
 
+Back
 
 
+</button>
 
 
-    {/* WEBSITE PREVIEW */}
 
 
+</div>
 
-    <div
 
-    className={
 
-    `
 
-    mx-auto
-    transition-all
-    duration-500
+</div>
+id="admin-preview-part2"
+{/* WEBSITE PREVIEW */}
 
-    ${
-    mode==="mobile"
 
-    ?
+<div
 
-    "max-w-sm"
+className={`
 
-    :
+mx-auto
 
-    "max-w-full"
+transition-all
 
-    }
+duration-500
 
-    `
 
-    }
+${
+mode==="mobile"
 
-    >
+?
 
+"max-w-[390px] rounded-3xl shadow-2xl overflow-hidden border"
 
+:
 
+"w-full"
 
+}
 
-    <Hero website={website}/>
+`}
 
+>
 
-    <About website={website}/>
 
 
-    <Gallery website={website}/>
+<Hero website={website}/>
 
 
-    <Features website={website}/>
+<About website={website}/>
 
 
-    <Services website={website}/>
+<Gallery website={website}/>
 
 
-    <Pricing website={website}/>
+<Features website={website}/>
 
 
-    <Testimonials website={website}/>
+<Services website={website}/>
 
 
-    <FAQ website={website}/>
+<Pricing website={website}/>
 
 
-    <Contact website={website}/>
+<Testimonials website={website}/>
 
 
+<FAQ website={website}/>
 
 
+<Contact website={website}/>
 
-    <LeadForm
 
-    ownerId={website.ownerId}
 
-    websiteId={website.websiteId}
 
-    />
 
+<LeadForm
 
+ownerId={website.ownerId}
 
+websiteId={website.websiteId}
 
+/>
 
-    <Footer website={website}/>
 
 
 
 
+<Footer website={website}/>
 
-    </div>
 
 
+</div>
 
 
 
-    </div>
 
 
-    )
+</div>
 
-    }
 
+)
 
+}
 
-    export default AdminPreview;
+
+
+export default AdminPreview;

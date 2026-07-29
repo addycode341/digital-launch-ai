@@ -1,147 +1,44 @@
 import React from "react";
 
 import {
-  LayoutDashboard,
-  Users,
-  Globe,
-  CreditCard,
-  MessageSquare,
-  BarChart3,
-  Settings,
-  LogOut,
-  FileText,
-  Shield,
-  Database
-} from "lucide-react";
-
-
-import {
-  NavLink,
-  useNavigate
+NavLink,
+useNavigate
 } from "react-router-dom";
 
 
+import {
 
+LayoutDashboard,
+Users,
+Globe,
+CreditCard,
+BarChart3,
+MessageSquare,
+Settings,
+LogOut,
+X
 
-
-function AdminSidebar(){
-
-
-const navigate = useNavigate();
-
-
-
-
-const menu = [
-
-
-{
-name:"Dashboard",
-path:"/admin",
-icon:<LayoutDashboard size={20}/>
-},
-
-
-
-{
-name:"Clients",
-path:"/admin/clients",
-icon:<Users size={20}/>
-},
-
-
-
-
-{
-name:"Websites",
-path:"/admin/websites",
-icon:<Globe size={20}/>
-},
-
-
-
-
-{
-name:"Payments",
-path:"/admin/payments",
-icon:<CreditCard size={20}/>
-},
-
-
-
-
-{
-name:"Leads",
-path:"/admin/leads",
-icon:<MessageSquare size={20}/>
-},
-
-
-
-
-{
-name:"Analytics",
-path:"/admin/analytics",
-icon:<BarChart3 size={20}/>
-},
-
-
-
-
-{
-name:"Reports",
-path:"#",
-icon:<FileText size={20}/>
-},
-
-
-
-
-{
-name:"Security",
-path:"#",
-icon:<Shield size={20}/>
-},
-
-
-
-
-{
-name:"Database",
-path:"#",
-icon:<Database size={20}/>
-},
-
-
-
-
-{
-name:"Settings",
-path:"/admin/settings",
-icon:<Settings size={20}/>
-}
-
-
-
-];
+} from "lucide-react";
 
 
 
 
 
+function AdminSidebar({open,setOpen}){
 
-const logout = ()=>{
 
+const navigate=useNavigate();
+
+
+
+const logout=()=>{
 
 localStorage.removeItem(
-"adminLogin"
+"adminLoggedIn"
 );
 
 
-navigate(
-"/admin/login"
-);
-
+navigate("/admin/login");
 
 };
 
@@ -149,99 +46,185 @@ navigate(
 
 
 
+const links=[
+
+{
+name:"Dashboard",
+path:"/admin",
+icon:<LayoutDashboard/>
+},
+
+{
+name:"Clients",
+path:"/admin/clients",
+icon:<Users/>
+},
+
+{
+name:"Websites",
+path:"/admin/websites",
+icon:<Globe/>
+},
+
+
+{
+name:"Payments",
+path:"/admin/payments",
+icon:<CreditCard/>
+},
+
+
+{
+name:"Analytics",
+path:"/admin/analytics",
+icon:<BarChart3/>
+},
+
+
+{
+name:"Leads",
+path:"/admin/leads",
+icon:<MessageSquare/>
+},
+
+
+{
+name:"Settings",
+path:"/admin/settings",
+icon:<Settings/>
+}
+
+
+];
+
 
 
 
 return(
 
 
-<aside
-
-className="
-fixed
-left-0
-top-0
-
-w-72
-h-screen
-
-bg-[#050816]
-
-border-r
-border-white/10
-
-text-white
-
-flex
-flex-col
-
-z-50
-
-"
-
->
+<>
 
 
+{/* OVERLAY MOBILE */}
 
+{
 
-
-
-
-{/* LOGO */}
-
-
+open &&
 
 <div
 
-className="
-p-6
+onClick={()=>setOpen(false)}
 
-border-b
+className="
+fixed
+inset-0
+bg-black/60
+z-40
+lg:hidden
+"
+
+/>
+
+}
+
+
+
+
+
+<aside
+
+
+className={`
+
+fixed
+
+top-0
+
+left-0
+
+h-screen
+
+w-72
+
+bg-[#080d1d]
+
+border-r
+
 border-white/10
 
-"
+p-6
+
+z-50
+
+transition-transform
+
+duration-300
+
+
+${
+
+open
+
+?
+
+"translate-x-0"
+
+:
+
+"-translate-x-full lg:translate-x-0"
+
+}
+
+
+`}
+
 
 >
 
 
-<h1
 
-className="
+<div className="
+flex
+justify-between
+items-center
+mb-10
+">
+
+
+<h1 className="
 text-2xl
 font-bold
+">
 
-bg-gradient-to-r
-from-purple-400
-to-blue-400
+DigitalLaunch
 
-bg-clip-text
-text-transparent
+<span className="
+text-purple-500
+">
 
-"
+.AI
 
->
+</span>
 
-DigitalLaunch.AI
 
 </h1>
 
 
 
-<p
+<button
 
 className="
-text-sm
-text-gray-400
-mt-1
-
+lg:hidden
 "
+
+onClick={()=>setOpen(false)}
 
 >
 
-Admin Control Center
+<X/>
 
-</p>
-
+</button>
 
 
 </div>
@@ -252,83 +235,57 @@ Admin Control Center
 
 
 
-
-
-{/* MENU */}
-
-
-
-<nav
-
-className="
-flex-1
-
-overflow-y-auto
-
-p-5
-
+<nav className="
 space-y-3
-
-"
-
->
+">
 
 
 {
 
-
-menu.map((item)=>(
+links.map(item=>(
 
 
 <NavLink
 
 
-key={item.name}
+key={item.path}
 
 
 to={item.path}
 
 
+onClick={()=>setOpen(false)}
 
-className={({isActive})=>`
 
+className={({isActive})=>
+
+`
 
 flex
 items-center
-gap-4
-
+gap-3
 px-4
 py-3
-
 rounded-xl
-
-transition-all
-duration-300
-
+transition
 
 ${
 
-
 isActive
-
 
 ?
 
-"bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg"
-
+"bg-purple-600 text-white"
 
 :
 
-
-"text-gray-400 hover:text-white hover:bg-white/10"
-
+"text-gray-400 hover:bg-white/10 hover:text-white"
 
 }
 
+`
 
-
-`}
-
+}
 
 
 >
@@ -336,23 +293,15 @@ isActive
 
 {item.icon}
 
-
-
-<span
-
-className="
-font-medium
-"
-
->
+<span>
 
 {item.name}
 
 </span>
 
 
-
 </NavLink>
+
 
 
 ))
@@ -371,113 +320,6 @@ font-medium
 
 
 
-
-{/* ADMIN PROFILE */}
-
-
-
-<div
-
-className="
-p-5
-
-border-t
-border-white/10
-
-"
-
->
-
-
-
-<div
-
-className="
-flex
-items-center
-gap-3
-mb-5
-
-"
-
->
-
-
-
-<div
-
-className="
-w-11
-h-11
-
-rounded-full
-
-bg-gradient-to-r
-from-purple-600
-to-blue-600
-
-flex
-items-center
-justify-center
-
-font-bold
-
-"
-
->
-
-A
-
-</div>
-
-
-
-
-
-<div>
-
-<h3
-
-className="
-font-semibold
-"
-
->
-
-Aditya
-
-</h3>
-
-
-
-<p
-
-className="
-text-xs
-text-gray-400
-"
-
->
-
-Super Admin
-
-</p>
-
-
-</div>
-
-
-
-</div>
-
-
-
-
-
-
-
-
-
 <button
 
 
@@ -485,36 +327,23 @@ onClick={logout}
 
 
 className="
-
+mt-10
 w-full
-
 flex
 items-center
-justify-center
-gap-2
-
+gap-3
+px-4
 py-3
-
 rounded-xl
-
-
-bg-red-500/10
-
+bg-red-500/20
 text-red-400
-
-
-hover:bg-red-500/20
-
-
-transition
-
 "
+
 
 >
 
 
-<LogOut size={18}/>
-
+<LogOut/>
 
 Logout
 
@@ -525,22 +354,16 @@ Logout
 
 
 
-</div>
-
-
-
-
-
-
 </aside>
 
 
 
+</>
+
+
 )
 
-
 }
-
 
 
 export default AdminSidebar;

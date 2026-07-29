@@ -5,7 +5,8 @@ useState
 
 
 import {
-useParams
+useParams,
+useNavigate
 } from "react-router-dom";
 
 
@@ -15,6 +16,7 @@ getDoc,
 collection,
 getDocs,
 addDoc,
+updateDoc,
 serverTimestamp
 } from "firebase/firestore";
 
@@ -32,16 +34,19 @@ Plus,
 CheckCircle,
 Eye,
 BarChart3,
-IndianRupee
+Save
 } from "lucide-react";
 
 
 
 
-const ClientDetail=()=>{
+
+function ClientDetail(){
 
 
 const {id}=useParams();
+
+const navigate=useNavigate();
 
 
 
@@ -51,22 +56,25 @@ const [websites,setWebsites]=useState([]);
 
 const [loading,setLoading]=useState(true);
 
-
 const [showForm,setShowForm]=useState(false);
+
+
+
+
+const [plan,setPlan]=useState("");
 
 
 
 const [website,setWebsite]=useState({
 
 title:"",
-
-template:"",
-
-status:"published",
-
+template:"Gym",
+status:"draft",
 plan:"Starter"
 
 });
+
+
 
 
 
@@ -83,33 +91,34 @@ loadClient();
 
 
 
+
 const loadClient=async()=>{
 
 
 try{
 
 
-const userRef=doc(
+const userSnap=await getDoc(
+
+doc(
 db,
 "users",
 id
+)
+
 );
-
-
-const userSnap=await getDoc(userRef);
 
 
 
 if(userSnap.exists()){
 
 
-setClient({
+const data=userSnap.data();
 
-id,
 
-...userSnap.data()
+setClient(data);
 
-});
+setPlan(data.plan || "Starter");
 
 
 }
@@ -120,7 +129,7 @@ id,
 
 
 
-const websiteSnap=await getDocs(
+const webSnap=await getDocs(
 
 collection(
 db,
@@ -136,7 +145,8 @@ id,
 let list=[];
 
 
-websiteSnap.forEach((item)=>{
+
+webSnap.forEach(item=>{
 
 
 list.push({
@@ -178,12 +188,51 @@ setLoading(false);
 
 
 
+
+
+const updatePlan=async()=>{
+
+
+await updateDoc(
+
+doc(
+db,
+"users",
+id
+),
+
+{
+
+plan
+
+}
+
+);
+
+
+alert(
+"Plan Updated 🚀"
+);
+
+
+};
+
+
+
+
+
+
+
+
+
 const assignWebsite=async()=>{
 
 
 if(!website.title){
 
-alert("Enter website name");
+alert(
+"Enter website name"
+);
 
 return;
 
@@ -191,11 +240,7 @@ return;
 
 
 
-try{
-
-
 await addDoc(
-
 
 collection(
 db,
@@ -204,34 +249,17 @@ id,
 "websites"
 ),
 
-
 {
 
-
-title:website.title,
-
-
-template:website.template,
-
-
-status:website.status,
-
-
-plan:website.plan,
-
+...website,
 
 visitors:0,
 
-
 leads:0,
-
 
 createdAt:serverTimestamp()
 
-
-
 }
-
 
 
 );
@@ -239,40 +267,14 @@ createdAt:serverTimestamp()
 
 
 alert(
-"Website Assigned 🚀"
+"Website Added"
 );
-
-
-
-setWebsite({
-
-title:"",
-
-template:"",
-
-status:"published",
-
-plan:"Starter"
-
-});
 
 
 setShowForm(false);
 
 
 loadClient();
-
-
-
-}
-
-
-catch(error){
-
-console.log(error);
-
-}
-
 
 
 };
@@ -299,7 +301,7 @@ items-center
 justify-center
 ">
 
-Loading Client...
+Loading...
 
 </div>
 
@@ -312,16 +314,11 @@ Loading Client...
 
 
 
-
 if(!client){
-
 
 return(
 
-<div className="
-text-white
-p-10
-">
+<div className="text-white">
 
 Client Not Found
 
@@ -337,31 +334,13 @@ Client Not Found
 
 
 
-const published =
-websites.filter(
-item=>item.status==="published"
-).length;
-
-
-
-
-const revenue =
-websites.length * 799;
-
-
-
-
-
 
 
 return(
 
 
 <div className="
-min-h-screen
-bg-[#050816]
 text-white
-p-8
 space-y-10
 ">
 
@@ -371,48 +350,25 @@ space-y-10
 
 
 
-{/* HEADER */}
-
-
-
-<div>
-
 <h1 className="
 text-4xl
 font-bold
 ">
 
-Client Profile
+Client Details 👤
 
 </h1>
 
 
-<p className="
-text-gray-400
-mt-2
-">
-
-Manage customer website and subscription
-
-</p>
-
-
-</div>
 
 
 
 
-
-
-
-
-
-{/* CLIENT PROFILE */}
 
 
 
 <div className="
-bg-white/[0.06]
+bg-white/5
 border
 border-white/10
 rounded-3xl
@@ -423,8 +379,8 @@ p-8
 
 <div className="
 flex
-items-center
 gap-5
+items-center
 ">
 
 
@@ -438,7 +394,7 @@ items-center
 justify-center
 ">
 
-<User size={32}/>
+<User size={30}/>
 
 </div>
 
@@ -447,36 +403,36 @@ justify-center
 
 <div>
 
-
 <h2 className="
 text-3xl
 font-bold
 ">
 
-{client.name || "Unknown"}
+{client.name}
 
 </h2>
 
 
-<div className="
-flex
-items-center
-gap-2
+<p className="
 text-gray-400
-mt-2
+flex
+gap-2
+items-center
 ">
 
-<Mail size={16}/>
+<Mail size={15}/>
 
 {client.email}
 
-</div>
+</p>
 
 
 </div>
 
 
 </div>
+
+
 
 
 
@@ -485,148 +441,76 @@ mt-2
 
 
 <div className="
-grid
-md:grid-cols-4
-gap-5
 mt-8
+flex
+gap-4
+items-center
 ">
 
 
+<select
 
-<div className="
-bg-black/30
-rounded-2xl
-p-5
-">
+value={plan}
 
-<p className="
-text-gray-400
-">
+onChange={
+e=>setPlan(e.target.value)
+}
 
-Plan
+className="
+bg-black/40
+border
+border-white/10
+rounded-xl
+px-4
+py-3
+"
 
-</p>
+>
+
+<option>
+Starter
+</option>
+
+<option>
+Business
+</option>
+
+<option>
+Premium
+</option>
+
+</select>
 
 
-<h3 className="
-text-2xl
-font-bold
-mt-2
-">
 
-{client.plan || "Starter"}
 
-</h3>
+
+<button
+
+onClick={updatePlan}
+
+className="
+bg-green-600
+px-5
+py-3
+rounded-xl
+flex
+gap-2
+items-center
+"
+
+>
+
+<Save size={18}/>
+
+Update Plan
+
+</button>
+
 
 
 </div>
 
-
-
-
-
-<div className="
-bg-black/30
-rounded-2xl
-p-5
-">
-
-<p className="
-text-gray-400
-">
-
-Websites
-
-</p>
-
-
-<h3 className="
-text-2xl
-font-bold
-mt-2
-">
-
-{websites.length}
-
-</h3>
-
-
-</div>
-
-
-
-
-
-<div className="
-bg-black/30
-rounded-2xl
-p-5
-">
-
-
-<p className="
-text-gray-400
-">
-
-Published
-
-</p>
-
-
-<h3 className="
-text-2xl
-font-bold
-text-green-400
-mt-2
-">
-
-{published}
-
-</h3>
-
-
-</div>
-
-
-
-
-
-
-<div className="
-bg-black/30
-rounded-2xl
-p-5
-">
-
-
-<p className="
-text-gray-400
-">
-
-Revenue
-
-</p>
-
-
-<h3 className="
-text-2xl
-font-bold
-text-yellow-400
-mt-2
-">
-
-₹{revenue}
-
-</h3>
-
-
-</div>
-
-
-
-
-
-</div>
 
 
 
@@ -637,10 +521,6 @@ mt-2
 
 
 
-
-
-
-{/* WEBSITE HEADER */}
 
 
 
@@ -667,20 +547,19 @@ Websites 🌐
 onClick={()=>setShowForm(!showForm)}
 
 className="
-flex
-gap-2
-items-center
-bg-gradient-to-r
-from-purple-600
-to-blue-600
+bg-purple-600
 px-5
 py-3
 rounded-xl
-">
+flex
+gap-2
+"
 
-<Plus size={20}/>
+>
 
-Assign Website
+<Plus/>
+
+Add Website
 
 </button>
 
@@ -694,9 +573,6 @@ Assign Website
 
 
 
-{/* FORM */}
-
-
 
 {
 
@@ -704,84 +580,61 @@ showForm &&
 
 
 <div className="
-bg-white/[0.06]
+bg-white/5
 border
 border-white/10
 rounded-3xl
-p-8
-space-y-5
+p-6
+space-y-4
 ">
-
 
 
 <input
 
 placeholder="Website Name"
 
-value={website.title}
+className="
+w-full
+bg-black/30
+p-3
+rounded-xl
+"
 
 onChange={
-e=>
-setWebsite({
+e=>setWebsite({
 ...website,
 title:e.target.value
 })
 }
 
-className="
-w-full
-bg-black/40
-border
-border-white/10
-rounded-xl
-p-3
-"
-
 />
-
-
-
-
 
 
 
 <select
 
-value={website.template}
+className="
+w-full
+bg-black/30
+p-3
+rounded-xl
+"
 
 onChange={
-e=>
-setWebsite({
+e=>setWebsite({
 ...website,
 template:e.target.value
 })
 }
 
-
-className="
-w-full
-bg-black/40
-border
-border-white/10
-rounded-xl
-p-3
-"
-
 >
 
-
-<option value="">
-
-Select Template
-
+<option>
+Gym
 </option>
 
 <option>
 Bakery
-</option>
-
-<option>
-Gym
 </option>
 
 <option>
@@ -798,59 +651,13 @@ Real Estate
 
 
 
-
-
-<select
-
-value={website.plan}
-
-onChange={
-e=>
-setWebsite({
-...website,
-plan:e.target.value
-})
-}
-
-
-className="
-w-full
-bg-black/40
-border
-border-white/10
-rounded-xl
-p-3
-"
-
->
-
-<option>
-Starter
-</option>
-
-<option>
-Business
-</option>
-
-<option>
-Premium
-</option>
-
-
-</select>
-
-
-
-
-
-
 <button
 
 onClick={assignWebsite}
 
 className="
 bg-green-600
-px-6
+px-5
 py-3
 rounded-xl
 "
@@ -860,7 +667,6 @@ rounded-xl
 Save Website
 
 </button>
-
 
 
 </div>
@@ -873,10 +679,6 @@ Save Website
 
 
 
-
-
-
-{/* WEBSITE CARDS */}
 
 
 
@@ -898,7 +700,7 @@ websites.map(site=>(
 key={site.id}
 
 className="
-bg-white/[0.06]
+bg-white/5
 border
 border-white/10
 rounded-3xl
@@ -918,15 +720,26 @@ justify-between
 <Globe/>
 
 
-<CheckCircle
-className="
-text-green-400
-"
-/>
+{
+
+site.status==="published"
+
+?
+
+<CheckCircle className="text-green-400"/>
+
+:
+
+<span className="text-yellow-400">
+
+Draft
+
+</span>
+
+}
 
 
 </div>
-
 
 
 
@@ -942,71 +755,13 @@ mt-5
 </h3>
 
 
-
 <p className="
 text-gray-400
 ">
 
-Template:
 {site.template}
 
 </p>
-
-
-
-<div className="
-grid
-grid-cols-2
-gap-4
-mt-5
-">
-
-
-
-<div className="
-bg-black/30
-rounded-xl
-p-3
-">
-
-<Eye size={18}/>
-
-<p>
-
-{site.visitors || 0}
-
-Visitors
-
-</p>
-
-</div>
-
-
-
-
-
-<div className="
-bg-black/30
-rounded-xl
-p-3
-">
-
-<BarChart3 size={18}/>
-
-<p>
-
-{site.leads || 0}
-
-Leads
-
-</p>
-
-</div>
-
-
-
-
-</div>
 
 
 
@@ -1020,7 +775,13 @@ mt-6
 ">
 
 
-<button className="
+<button
+
+onClick={()=>navigate(
+`/admin/preview/${id}/${site.id}`
+)}
+
+className="
 flex-1
 bg-blue-600
 py-3
@@ -1028,9 +789,11 @@ rounded-xl
 flex
 justify-center
 gap-2
-">
+"
 
-<Eye size={18}/>
+>
+
+<Eye/>
 
 Preview
 
@@ -1038,7 +801,15 @@ Preview
 
 
 
-<button className="
+
+
+<button
+
+onClick={()=>navigate(
+`/admin/analytics/${id}/${site.id}`
+)}
+
+className="
 flex-1
 bg-purple-600
 py-3
@@ -1046,13 +817,16 @@ rounded-xl
 flex
 justify-center
 gap-2
-">
+"
 
-<BarChart3 size={18}/>
+>
+
+<BarChart3/>
 
 Analytics
 
 </button>
+
 
 
 </div>
@@ -1086,7 +860,6 @@ Analytics
 
 
 }
-
 
 
 export default ClientDetail;

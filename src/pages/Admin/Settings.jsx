@@ -1,4 +1,4 @@
-import React, {
+import React,{
 useEffect,
 useState
 } from "react";
@@ -13,23 +13,28 @@ db
 import {
 doc,
 getDoc,
+setDoc,
 updateDoc
 } from "firebase/firestore";
 
+
+import {
+onAuthStateChanged
+} from "firebase/auth";
 
 
 import {
 Settings as SettingsIcon,
 User,
 Mail,
+Building,
 Save
 } from "lucide-react";
 
 
 
 
-
-const Settings =()=>{
+const Settings=()=>{
 
 
 const [form,setForm]=useState({
@@ -41,8 +46,11 @@ company:"DigitalLaunch AI"
 });
 
 
-const [loading,setLoading]=useState(false);
+const [user,setUser]=useState(null);
 
+const [loading,setLoading]=useState(true);
+
+const [saving,setSaving]=useState(false);
 
 
 
@@ -52,7 +60,29 @@ const [loading,setLoading]=useState(false);
 useEffect(()=>{
 
 
-loadSettings();
+const unsubscribe = onAuthStateChanged(
+auth,
+(currentUser)=>{
+
+
+if(currentUser){
+
+setUser(currentUser);
+
+loadSettings(currentUser);
+
+}
+else{
+
+setLoading(false);
+
+}
+
+
+});
+
+
+return ()=>unsubscribe();
 
 
 },[]);
@@ -65,30 +95,26 @@ loadSettings();
 
 
 
-const loadSettings=async()=>{
+const loadSettings=async(currentUser)=>{
 
 
 try{
 
 
-const user=auth.currentUser;
+const ref = doc(
 
-
-if(!user)
-return;
-
-
-
-const snap=
-await getDoc(
-
-doc(
 db,
+
 "users",
-user.uid
-)
+
+currentUser.uid
 
 );
+
+
+
+const snap = await getDoc(ref);
+
 
 
 
@@ -100,11 +126,48 @@ const data=snap.data();
 
 setForm({
 
-name:data.name || "",
+name:data.name || "Admin",
 
-email:data.email || user.email,
+email:currentUser.email,
 
 company:data.company || "DigitalLaunch AI"
+
+});
+
+
+}
+
+else{
+
+
+await setDoc(
+
+ref,
+
+{
+
+name:"Admin",
+
+email:currentUser.email,
+
+company:"DigitalLaunch AI",
+
+role:"admin",
+
+createdAt:new Date()
+
+}
+
+);
+
+
+setForm({
+
+name:"Admin",
+
+email:currentUser.email,
+
+company:"DigitalLaunch AI"
 
 });
 
@@ -117,7 +180,17 @@ company:data.company || "DigitalLaunch AI"
 
 catch(error){
 
-console.log(error);
+console.log(
+"Load Settings Error",
+error
+);
+
+
+}
+
+finally{
+
+setLoading(false);
 
 }
 
@@ -157,54 +230,62 @@ setForm({
 const saveSettings=async()=>{
 
 
+if(!user){
+
+alert(
+"Admin login required"
+);
+
+return;
+
+}
+
+
+
 try{
 
 
-setLoading(true);
-
-
-
-const user=auth.currentUser;
-
-
-
-if(!user)
-return;
+setSaving(true);
 
 
 
 await updateDoc(
 
+
 doc(
+
 db,
+
 "users",
+
 user.uid
+
 ),
+
 
 {
 
 
 name:form.name,
 
+company:form.company,
 
-company:form.company
-
+updatedAt:new Date()
 
 }
 
-);
 
+);
 
 
 
 alert(
-"Settings Updated Successfully 🚀"
+"Settings Updated 🚀"
 );
 
 
 
 }
-
 
 catch(error){
 
@@ -219,11 +300,10 @@ error.message
 
 }
 
-
 finally{
 
 
-setLoading(false);
+setSaving(false);
 
 
 }
@@ -240,36 +320,55 @@ setLoading(false);
 
 
 
+if(loading){
+
+
+return(
+
+<div className="
+min-h-screen
+text-white
+flex
+items-center
+justify-center
+">
+
+Loading Settings...
+
+</div>
+
+)
+
+}
+
+
+
+
+
+
+
+
 return(
 
 
-<div
-
-className="
+<div className="
 text-white
 space-y-8
-"
-
->
+">
 
 
 <div>
 
 
-<h1
-
-className="
+<h1 className="
 text-4xl
 font-bold
 flex
 items-center
 gap-3
-"
+">
 
->
-
-
-<SettingsIcon/>
+<SettingsIcon size={35}/>
 
 Admin Settings
 
@@ -277,16 +376,12 @@ Admin Settings
 
 
 
-<p
-
-className="
+<p className="
 text-gray-400
 mt-2
-"
+">
 
->
-
-Manage your admin account
+Manage DigitalLaunch AI admin profile
 
 </p>
 
@@ -301,9 +396,7 @@ Manage your admin account
 
 
 
-<div
-
-className="
+<div className="
 max-w-2xl
 bg-white/[0.05]
 border
@@ -311,16 +404,13 @@ border-white/10
 rounded-3xl
 p-8
 space-y-6
-"
-
->
+">
 
 
 
 
 
 <div>
-
 
 <label className="
 text-gray-400
@@ -331,12 +421,11 @@ Admin Name
 </label>
 
 
-
 <div className="
+mt-2
 flex
 items-center
 gap-3
-mt-2
 bg-black/40
 border
 border-white/10
@@ -357,13 +446,11 @@ value={form.name}
 onChange={handleChange}
 
 className="
+w-full
 bg-transparent
 outline-none
-w-full
 py-3
 "
-
-placeholder="Admin Name"
 
 />
 
@@ -372,6 +459,7 @@ placeholder="Admin Name"
 
 
 </div>
+
 
 
 
@@ -394,10 +482,10 @@ Admin Email
 
 
 <div className="
+mt-2
 flex
 items-center
 gap-3
-mt-2
 bg-black/40
 border
 border-white/10
@@ -416,9 +504,9 @@ value={form.email}
 disabled
 
 className="
+w-full
 bg-transparent
 outline-none
-w-full
 py-3
 text-gray-400
 "
@@ -452,6 +540,23 @@ Company Name
 
 
 
+<div className="
+mt-2
+flex
+items-center
+gap-3
+bg-black/40
+border
+border-white/10
+rounded-xl
+px-4
+">
+
+
+<Building size={18}/>
+
+
+
 <input
 
 name="company"
@@ -462,17 +567,15 @@ onChange={handleChange}
 
 className="
 w-full
-mt-2
-bg-black/40
-border
-border-white/10
-rounded-xl
-px-4
-py-3
+bg-transparent
 outline-none
+py-3
 "
 
 />
+
+
+</div>
 
 
 </div>
@@ -487,26 +590,22 @@ outline-none
 
 <button
 
-
 onClick={saveSettings}
 
-
-disabled={loading}
-
+disabled={saving}
 
 className="
 flex
 items-center
 gap-2
-bg-gradient-to-r
-from-purple-600
-to-blue-600
 px-6
 py-3
 rounded-xl
+bg-gradient-to-r
+from-purple-600
+to-blue-600
 font-semibold
 "
-
 
 >
 
@@ -516,7 +615,7 @@ font-semibold
 
 {
 
-loading
+saving
 
 ?
 
@@ -535,12 +634,7 @@ loading
 
 
 
-
 </div>
-
-
-
-
 
 
 

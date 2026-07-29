@@ -1,3 +1,4 @@
+import React from "react";
 import { Navigate } from "react-router-dom";
 
 
@@ -5,9 +6,7 @@ function AdminProtectedRoute({children}){
 
 
 const adminLoggedIn =
-localStorage.getItem(
-"adminLoggedIn"
-);
+localStorage.getItem("adminLoggedIn");
 
 
 
@@ -29,7 +28,6 @@ replace
 
 
 return children;
-
 
 
 }

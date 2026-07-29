@@ -41,16 +41,31 @@ import FeatureRoute from "./components/FeatureRoute";
 import AdminLogin from "./pages/Admin/AdminLogin";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import Clients from "./pages/Admin/Clients";
+import AddClient from "./pages/Admin/AddClient";
 import Websites from "./pages/Admin/Websites";
 import AdminAnalytics from "./pages/Admin/Analytics";
 import AdminPreview from "./pages/Admin/AdminPreview";
 import ClientDetail from "./pages/Admin/ClientDetail";
 import Payments from "./pages/Admin/Payments";
 import Leads from "./pages/Admin/Leads";
+import AdminSettings from "./pages/Admin/Settings";
+
 import ThankYou from "./pages/ThankYou";
-import AdminProtectedRoute from "./components/AdminProtectedRoute";
-import AdminLayout from "./pages/Admin/AdminLayout";
-import PremiumDashboard from "./pages/PremiumDashboard";
+
+
+import AdminProtectedRoute 
+from "./components/AdminProtectedRoute";
+
+
+import AdminLayout 
+from "./pages/Admin/AdminLayout";
+
+
+
+import PremiumDashboard 
+from "./pages/PremiumDashboard";
+
+
 
 
 // DEMO TEMPLATES
@@ -63,82 +78,168 @@ import RestaurantWebsite from "./Template/Restaurant/RestaurantWebsite";
 import Salon from "./Template/Salon/SalonWebsite";
 import HotelWebsite from "./Template/Hotel/HotelWebsite";
 import MobileStoreWebsite from "./Template/MobileStore/MobileStoreWebsite";
+
+
+
+
+
 function App(){
+
 
 return(
 
+
 <BrowserRouter>
+
 
 <Routes>
 
 
-{/* PUBLIC */}
 
-<Route path="/" element={<Home/>}/>
 
-<Route path="/login" element={<Login/>}/>
 
-<Route path="/signup" element={<Signup/>}/>
+{/* ================= PUBLIC ================= */}
 
-<Route path="/payment" element={<Payment/>}/>
+
 
 <Route 
+path="/"
+element={<Home/>}
+/>
+
+
+
+<Route 
+path="/login"
+element={<Login/>}
+/>
+
+
+
+<Route 
+path="/signup"
+element={<Signup/>}
+/>
+
+
+
+<Route 
+path="/payment"
+element={<Payment/>}
+/>
+
+
+
+<Route
+
 path="/website/:slug"
+
 element={<PublicWebsite/>}
+
 />
 
 
 
-{/* DEMO */}
+
+
+
+
+{/* ================= DEMO TEMPLATES ================= */}
+
+
 
 <Route
+
 path="/bakery-demo"
+
 element={<BakeryWebsite/>}
+
 />
 
 
+
 <Route
+
 path="/printing-business"
+
 element={<PrintingBusiness/>}
+
 />
 
 
+
 <Route
+
 path="/Gym-demo"
+
 element={<Gym/>}
+
 />
 
 
+
 <Route
+
 path="/real-estate-demo"
+
 element={<RealEstate/>}
+
 />
 
+
+
 <Route
+
 path="/restaurant-demo"
+
 element={<RestaurantWebsite/>}
+
 />
 
 
+
 <Route
+
 path="/salon-demo"
+
 element={<Salon/>}
+
 />
 
+
+
 <Route
+
 path="/hotel-demo"
+
 element={<HotelWebsite/>}
+
 />
 
+
+
 <Route
+
 path="/mobile-demo"
+
 element={<MobileStoreWebsite/>}
+
 />
 
-{/* USER DASHBOARD */}
+
+
+
+
+
+
+
+
+{/* ================= USER DASHBOARD ================= */}
+
 
 
 <Route
+
 
 element={
 
@@ -150,45 +251,69 @@ element={
 
 }
 
+
 >
 
 
+
 <Route
+
 path="/dashboard"
+
 element={<Dashboard/>}
+
 />
 
+
+
 <Route
+
 path="/premium-dashboard"
-element={<PremiumDashboard />}
+
+element={<PremiumDashboard/>}
+
 />
 
+
+
 <Route
+
 path="/builder"
+
 element={<Builder/>}
+
 />
 
 
 
 <Route
+
 path="/builder/:id"
+
 element={<Builder/>}
+
 />
 
 
 
 <Route
+
 path="/preview"
+
 element={<Preview/>}
+
 />
 
 
 
 <Route
+
 
 path="/analytics"
 
+
 element={
+
 
 <FeatureRoute feature="analytics">
 
@@ -196,7 +321,9 @@ element={
 
 </FeatureRoute>
 
+
 }
+
 
 />
 
@@ -204,9 +331,12 @@ element={
 
 <Route
 
+
 path="/seo-report"
 
+
 element={
+
 
 <FeatureRoute feature="seo">
 
@@ -214,7 +344,9 @@ element={
 
 </FeatureRoute>
 
+
 }
+
 
 />
 
@@ -222,9 +354,12 @@ element={
 
 <Route
 
+
 path="/leads"
 
+
 element={
+
 
 <FeatureRoute feature="leads">
 
@@ -232,23 +367,32 @@ element={
 
 </FeatureRoute>
 
+
 }
 
+
 />
 
 
 
 <Route
+
 path="/settings"
+
 element={<Settings/>}
+
 />
 
 
 
 <Route
+
 path="/my-websites"
+
 element={<MyWebsites/>}
+
 />
+
 
 
 </Route>
@@ -258,7 +402,12 @@ element={<MyWebsites/>}
 
 
 
-{/* ADMIN LOGIN */}
+
+
+
+{/* ================= ADMIN LOGIN ================= */}
+
+
 
 <Route
 
@@ -272,85 +421,182 @@ element={<AdminLogin/>}
 
 
 
-{/* ADMIN PANEL */}
+
+
+
+
+{/* ================= ADMIN PANEL ================= */}
+
+
 
 
 <Route
 
+
 element={
+
 
 <AdminProtectedRoute>
 
+
 <AdminLayout/>
+
 
 </AdminProtectedRoute>
 
+
 }
+
+
 
 >
 
 
+
 <Route
+
 path="/admin"
+
 element={<AdminDashboard/>}
+
 />
 
 
+
+
 <Route
+
 path="/admin/clients"
+
 element={<Clients/>}
+
 />
 
 
+
+
 <Route
+
+path="/admin/add-client"
+
+element={<AddClient/>}
+
+/>
+
+
+
+
+<Route
+
 path="/admin/client/:id"
+
 element={<ClientDetail/>}
+
 />
 
 
+
+
 <Route
+
 path="/admin/websites"
+
 element={<Websites/>}
+
 />
 
 
+
+
 <Route
+
 path="/admin/payments"
+
 element={<Payments/>}
+
 />
 
 
+
+
 <Route
+
 path="/admin/leads"
+
 element={<Leads/>}
+
 />
 
 
+
+
 <Route
+
 path="/admin/analytics"
+
 element={<AdminAnalytics/>}
+
 />
+
+
 
 
 <Route
+
+path="/admin/settings"
+
+element={<AdminSettings/>}
+
+/>
+
+
+
+
+<Route
+
 path="/admin/preview/:id"
+
 element={<AdminPreview/>}
+
 />
-<Route 
-path="/thank-you" 
-element={<ThankYou />} 
-/>
+
+
+
 
 </Route>
 
 
+
+
+
+
+
+
+
+{/* THANK YOU */}
+
+
+
+<Route
+
+path="/thank-you"
+
+element={<ThankYou/>}
+
+/>
+
+
+
+
 </Routes>
 
+
 </BrowserRouter>
+
 
 )
 
 }
 
 
-export default App; 
+export default App;

@@ -1,4 +1,4 @@
-import React, {
+import React,{
 useEffect,
 useState
 } from "react";
@@ -24,7 +24,8 @@ Trash2,
 CheckCircle,
 Globe,
 Edit,
-Search
+Search,
+User
 } from "lucide-react";
 
 
@@ -41,11 +42,10 @@ motion
 
 
 
-const Websites =()=>{
+const Websites=()=>{
 
 
-const navigate = useNavigate();
-
+const navigate=useNavigate();
 
 
 const [websites,setWebsites]=useState([]);
@@ -69,22 +69,19 @@ loadWebsites();
 
 
 
-
-
-
 const loadWebsites=async()=>{
 
 
 try{
 
 
-const usersSnap = await getDocs(
+setLoading(true);
 
-collection(
-db,
-"users"
-)
 
+
+const usersSnap =
+await getDocs(
+collection(db,"users")
 );
 
 
@@ -93,14 +90,17 @@ let list=[];
 
 
 
+
 for(const user of usersSnap.docs){
+
 
 
 const userData=user.data();
 
 
 
-const websiteSnap = await getDocs(
+const websiteSnap =
+await getDocs(
 
 collection(
 db,
@@ -118,6 +118,29 @@ websiteSnap.forEach(site=>{
 
 
 const data=site.data();
+
+
+
+let templateName="Business";
+
+
+
+if(typeof data.template==="object"){
+
+templateName =
+data.template.title || "Business";
+
+}
+
+else{
+
+templateName =
+data.template ||
+data.businessType ||
+"Business";
+
+}
+
 
 
 
@@ -140,9 +163,7 @@ data.title ||
 
 
 template:
-data.template ||
-data.businessType ||
-"Business",
+templateName,
 
 
 status:
@@ -157,11 +178,13 @@ data.createdAt || null
 });
 
 
+
 });
 
 
 
 }
+
 
 
 
@@ -178,6 +201,7 @@ console.log(
 error
 );
 
+
 }
 
 finally{
@@ -188,9 +212,6 @@ setLoading(false);
 
 
 };
-
-
-
 
 
 
@@ -224,6 +245,7 @@ status:"published"
 );
 
 
+
 loadWebsites();
 
 
@@ -237,9 +259,8 @@ console.log(error);
 }
 
 
+
 };
-
-
 
 
 
@@ -304,8 +325,8 @@ console.log(error);
 
 
 
-
-const filteredWebsites = websites.filter(site=>
+const filteredWebsites =
+websites.filter(site=>
 
 site.title
 .toLowerCase()
@@ -314,9 +335,6 @@ search.toLowerCase()
 )
 
 );
-
-
-
 
 
 
@@ -356,34 +374,25 @@ space-y-8
 >
 
 
-{/* HEADER */}
 
 
 <div>
 
 
-<h1
-
-className="
+<h1 className="
 text-4xl
 font-bold
-"
-
->
+">
 
 Websites 🌐
 
 </h1>
 
 
-<p
-
-className="
+<p className="
 text-gray-400
 mt-2
-"
-
->
+">
 
 Manage all customer websites
 
@@ -400,31 +409,22 @@ Manage all customer websites
 
 
 
-{/* STATS */}
-
-
-<div
-
-className="
+<div className="
 grid
 md:grid-cols-3
 gap-6
-"
-
->
+">
 
 
-<div
 
-className="
-bg-white/[0.05]
+<div className="
+bg-white/[0.06]
 border
 border-white/10
 rounded-3xl
 p-6
-"
+">
 
->
 
 <p className="
 text-gray-400
@@ -453,18 +453,14 @@ mt-2
 
 
 
-
-<div
-
-className="
-bg-white/[0.05]
+<div className="
+bg-white/[0.06]
 border
 border-white/10
 rounded-3xl
 p-6
-"
+">
 
->
 
 <p className="
 text-gray-400
@@ -494,18 +490,14 @@ mt-2
 
 
 
-
-<div
-
-className="
-bg-white/[0.05]
+<div className="
+bg-white/[0.06]
 border
 border-white/10
 rounded-3xl
 p-6
-"
+">
 
->
 
 <p className="
 text-gray-400
@@ -542,17 +534,9 @@ mt-2
 
 
 
-{/* SEARCH */}
-
-
-
-<div
-
-className="
+<div className="
 relative
-"
-
->
+">
 
 
 <Search
@@ -571,45 +555,33 @@ text-gray-400
 <input
 
 
+value={search}
+
+
+onChange={(e)=>
+setSearch(e.target.value)
+}
+
+
 placeholder="
 Search website...
 "
 
 
-value={search}
-
-
-onChange={
-e=>setSearch(e.target.value)
-}
-
-
 className="
-
 w-full
-
 bg-black/30
-
 border
-
 border-white/10
-
 rounded-2xl
-
 py-3
-
 pl-12
-
-pr-5
-
+px-5
 outline-none
-
 "
 
-
-
-
 />
+
 
 
 </div>
@@ -623,6 +595,7 @@ outline-none
 
 
 {
+
 loading ?
 
 
@@ -637,7 +610,6 @@ Loading Websites...
 
 
 :
-
 
 
 filteredWebsites.length===0 ?
@@ -657,21 +629,20 @@ No Websites Found
 
 
 
+
 :
 
 
-<div
-
-className="
+<div className="
 space-y-5
-"
-
->
+">
 
 
 {
 
+
 filteredWebsites.map(site=>(
+
 
 
 <motion.div
@@ -692,37 +663,26 @@ y:0
 }}
 
 
+
 className="
-
 bg-white/[0.06]
-
 border
-
 border-white/10
-
 rounded-3xl
-
 p-6
-
 flex
-
+flex-col
+lg:flex-row
 justify-between
-
-items-center
-
-hover:border-purple-500/40
-
-transition
-
+gap-5
 "
-
 
 >
 
 
 
-
 <div>
+
 
 
 <div className="
@@ -730,6 +690,7 @@ flex
 items-center
 gap-3
 ">
+
 
 <div className="
 w-12
@@ -741,6 +702,7 @@ items-center
 justify-center
 ">
 
+
 <Globe/>
 
 </div>
@@ -748,7 +710,7 @@ justify-center
 
 
 <h2 className="
-text-2xl
+text-xl
 font-bold
 ">
 
@@ -763,34 +725,37 @@ font-bold
 
 
 
-
 <p className="
 text-gray-400
 mt-4
+flex
+gap-2
+items-center
 ">
 
-Owner:
-<span className="text-white">
+<User size={16}/>
 
-{" "}
 {site.owner}
-
-</span>
 
 </p>
 
 
 
 
+
 <p className="
 text-gray-400
+mt-2
 ">
+
 
 Template:
 
-<span className="text-white">
+<span className="
+text-white
+ml-2
+">
 
-{" "}
 {site.template}
 
 </span>
@@ -803,21 +768,15 @@ Template:
 
 
 
-
 <span
 
 className={`
 
 inline-block
-
 mt-4
-
 px-4
-
 py-1
-
 rounded-full
-
 text-sm
 
 
@@ -838,12 +797,9 @@ site.status==="published"
 
 >
 
-
 {site.status}
 
-
 </span>
-
 
 
 
@@ -858,32 +814,26 @@ site.status==="published"
 
 
 
-
-
-<div
-
-className="
+<div className="
 flex
 gap-3
-"
-
->
-
+flex-wrap
+">
 
 
 
 <button
 
-onClick={()=>navigate(
+onClick={()=>
+navigate(
 `/admin/preview/${site.id}`
-)}
+)
+}
 
 className="
 bg-blue-600
 p-3
 rounded-xl
-hover:scale-105
-transition
 "
 
 >
@@ -896,20 +846,18 @@ transition
 
 
 
-
-
 <button
 
-onClick={()=>navigate(
+onClick={()=>
+navigate(
 `/admin/edit/${site.id}`
-)}
+)
+}
 
 className="
 bg-purple-600
 p-3
 rounded-xl
-hover:scale-105
-transition
 "
 
 >
@@ -923,9 +871,6 @@ transition
 
 
 
-
-
-
 {
 
 site.status!=="published" &&
@@ -933,20 +878,21 @@ site.status!=="published" &&
 
 <button
 
-onClick={()=>publishWebsite(site)}
+onClick={()=>
+publishWebsite(site)
+}
 
 className="
 bg-green-600
 p-3
 rounded-xl
-hover:scale-105
-transition
 "
 
 >
 
 
 <CheckCircle/>
+
 
 </button>
 
@@ -958,19 +904,16 @@ transition
 
 
 
-
-
-
 <button
 
-onClick={()=>deleteWebsite(site)}
+onClick={()=>
+deleteWebsite(site)
+}
 
 className="
 bg-red-600
 p-3
 rounded-xl
-hover:scale-105
-transition
 "
 
 >
@@ -978,9 +921,8 @@ transition
 
 <Trash2/>
 
+
 </button>
-
-
 
 
 
@@ -1003,7 +945,6 @@ transition
 
 
 </div>
-
 
 
 }

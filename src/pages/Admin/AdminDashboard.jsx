@@ -1,67 +1,67 @@
-import React, {
-  useEffect,
-  useState
+import React,{
+useEffect,
+useState
 } from "react";
 
 
 import {
-  collection,
-  getDocs
+collection,
+getDocs
 } from "firebase/firestore";
 
 
 import {
-  db
+db
 } from "../../firebase";
 
 
 import {
-  Users,
-  Globe,
-  IndianRupee,
-  TrendingUp,
-  Activity,
-  CheckCircle,
-  Eye,
-  CreditCard
+Users,
+Globe,
+Eye,
+IndianRupee,
+TrendingUp,
+Activity
 } from "lucide-react";
 
 
 import {
-  motion
+motion
 } from "framer-motion";
 
 
+import {
+LineChart,
+Line,
+XAxis,
+YAxis,
+Tooltip,
+ResponsiveContainer,
+CartesianGrid
+} from "recharts";
 
 
 
-const AdminDashboard = () => {
 
 
-
-const [loading,setLoading] = useState(true);
-
+const AdminDashboard=()=>{
 
 
-const [stats,setStats] = useState({
+const [stats,setStats]=useState({
 
 clients:0,
 websites:0,
 published:0,
-visitors:0,
-leads:0,
 revenue:0,
-payments:0
+visitors:0
 
 });
 
 
+const [chart,setChart]=useState([]);
 
-const [recentClients,setRecentClients] = useState([]);
 
-const [recentWebsites,setRecentWebsites] = useState([]);
-
-const [recentPayments,setRecentPayments] = useState([]);
+const [loading,setLoading]=useState(true);
 
 
 
@@ -71,7 +71,9 @@ const [recentPayments,setRecentPayments] = useState([]);
 
 useEffect(()=>{
 
+
 loadDashboard();
+
 
 },[]);
 
@@ -83,40 +85,15 @@ loadDashboard();
 
 
 
-const loadDashboard = async()=>{
+const loadDashboard=async()=>{
 
 
 try{
 
 
 
-let clients = 0;
-
-let websites = 0;
-
-let published = 0;
-
-let visitors = 0;
-
-let leads = 0;
-
-
-
-
-
-let clientList=[];
-
-let websiteList=[];
-
-
-
-
-
-
-
-// USERS
-
-const usersSnap = await getDocs(
+const usersSnap =
+await getDocs(
 
 collection(
 db,
@@ -127,9 +104,18 @@ db,
 
 
 
-clients = usersSnap.size;
+let clients=0;
+
+let websites=0;
+
+let published=0;
+
+let revenue=0;
+
+let visitors=0;
 
 
+let graph=[];
 
 
 
@@ -138,41 +124,19 @@ clients = usersSnap.size;
 for(const user of usersSnap.docs){
 
 
-
-const userData = user.data();
-
-
-
-clientList.push({
-
-id:user.id,
-
-name:userData.name || "Unknown",
-
-email:userData.email || "-"
-
-});
+clients++;
 
 
 
 
 
-
-
-
-// WEBSITES
-
-
-const websitesSnap = await getDocs(
+const websiteSnap =
+await getDocs(
 
 collection(
-
 db,
-
 "users",
-
 user.id,
-
 "websites"
 
 )
@@ -181,219 +145,44 @@ user.id,
 
 
 
-websites += websitesSnap.size;
 
 
+websiteSnap.forEach(site=>{
 
 
+const data=site.data();
 
 
+websites++;
 
 
-for(const site of websitesSnap.docs){
-
-
-
-const siteData = site.data();
-
-
-
-
-
-websiteList.push({
-
-id:site.id,
-
-title:siteData.title || "Untitled",
-
-status:siteData.status || "draft"
-
-});
-
-
-
-
-
-
-if(siteData.status==="published"){
+if(data.status==="published"){
 
 published++;
 
+revenue+=799;
+
 }
 
 
 
+visitors +=
+data.visitors || 0;
 
 
 
 
+graph.push({
 
-// LEADS
+name:
+data.title || "Site",
 
-
-const leadsSnap = await getDocs(
-
-collection(
-
-db,
-
-"users",
-
-user.id,
-
-"websites",
-
-site.id,
-
-"leads"
-
-)
-
-);
-
-
-
-leads += leadsSnap.size;
-
-
-
-
-
-
-
-
-
-
-// ANALYTICS
-
-
-const analyticsSnap = await getDocs(
-
-collection(
-
-db,
-
-"users",
-
-user.id,
-
-"websites",
-
-site.id,
-
-"analytics"
-
-)
-
-);
-
-
-
-
-analyticsSnap.forEach((item)=>{
-
-
-visitors += Number(
-
-item.data().visits || 0
-
-);
+visitors:
+data.visitors || 0
 
 
 });
 
-
-
-
-
-}
-
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-// PAYMENTS
-
-
-const paymentsSnap = await getDocs(
-
-collection(
-db,
-"payments"
-)
-
-);
-
-
-
-let revenue = 0;
-
-let paymentList=[];
-
-
-
-
-
-
-
-paymentsSnap.forEach((payment)=>{
-
-
-
-const data = payment.data();
-
-
-
-
-if(data.status==="success"){
-
-
-
-
-
-let amount = Number(
-
-String(data.amount || 0)
-
-.replace("₹","")
-
-.replace(",","")
-
-);
-
-
-
-
-
-revenue += amount || 0;
-
-
-
-
-
-
-
-paymentList.push({
-
-id:payment.id,
-
-name:data.name || "Customer",
-
-plan:data.plan || "Starter",
-
-amount:amount,
-
-status:data.status
 
 
 });
@@ -401,14 +190,6 @@ status:data.status
 
 
 }
-
-
-
-
-});
-
-
-
 
 
 
@@ -423,44 +204,16 @@ websites,
 
 published,
 
-visitors,
-
-leads,
-
 revenue,
 
-payments:paymentList.length
+visitors
+
 
 });
 
 
 
-
-
-setRecentClients(
-
-clientList.slice(0,5)
-
-);
-
-
-
-setRecentWebsites(
-
-websiteList.slice(0,5)
-
-);
-
-
-
-setRecentPayments(
-
-paymentList.slice(0,5)
-
-);
-
-
-
+setChart(graph);
 
 
 
@@ -468,23 +221,16 @@ paymentList.slice(0,5)
 
 catch(error){
 
-
-console.log(
-"Dashboard Error",
-error
-);
-
+console.log(error);
 
 }
+
 
 finally{
 
-
 setLoading(false);
 
-
 }
-
 
 
 };
@@ -497,65 +243,61 @@ setLoading(false);
 
 
 
-
-
-
-
 const cards=[
 
 
-
 {
+
 title:"Total Clients",
+
 value:stats.clients,
-icon:<Users size={25}/>
+
+icon:<Users size={28}/>,
+
+color:"purple"
+
 },
 
 
+
 {
+
 title:"Websites",
+
 value:stats.websites,
-icon:<Globe size={25}/>
+
+icon:<Globe size={28}/>,
+
+color:"blue"
+
 },
 
 
 
 {
-title:"Published",
-value:stats.published,
-icon:<CheckCircle size={25}/>
-},
 
-
-
-{
 title:"Visitors",
+
 value:stats.visitors,
-icon:<Eye size={25}/>
+
+icon:<Eye size={28}/>,
+
+color:"green"
+
 },
 
 
 
 {
-title:"Leads",
-value:stats.leads,
-icon:<TrendingUp size={25}/>
-},
 
-
-
-{
-title:"Payments",
-value:stats.payments,
-icon:<CreditCard size={25}/>
-},
-
-
-
-{
 title:"Revenue",
+
 value:`₹${stats.revenue}`,
-icon:<IndianRupee size={25}/>
+
+icon:<IndianRupee size={28}/>,
+
+color:"yellow"
+
 }
 
 
@@ -576,25 +318,17 @@ if(loading){
 return(
 
 <div className="
-min-h-screen
-bg-[#050816]
 text-white
-flex
-items-center
-justify-center
 text-xl
 ">
 
-Loading Dashboard 🚀
+Loading Dashboard...
 
 </div>
 
-
 )
 
-
 }
-
 
 
 
@@ -607,14 +341,21 @@ Loading Dashboard 🚀
 return(
 
 
+<div
 
-<div className="
+className="
 text-white
 space-y-10
-">
+"
+
+>
 
 
 
+
+
+
+{/* HEADER */}
 
 
 
@@ -626,9 +367,10 @@ text-4xl
 font-bold
 ">
 
-Admin Dashboard 🚀
+Dashboard 🚀
 
 </h1>
+
 
 
 <p className="
@@ -636,7 +378,7 @@ text-gray-400
 mt-2
 ">
 
-DigitalLaunch AI Control Center
+DigitalLaunch AI business overview
 
 </p>
 
@@ -651,13 +393,20 @@ DigitalLaunch AI Control Center
 
 
 
-<div className="
+{/* CARDS */}
+
+
+
+<div
+
+className="
 grid
 md:grid-cols-2
 xl:grid-cols-4
 gap-6
-">
+"
 
+>
 
 
 {
@@ -684,7 +433,6 @@ y:0
 }}
 
 
-
 transition={{
 delay:index*0.1
 }}
@@ -692,7 +440,8 @@ delay:index*0.1
 
 
 className="
-bg-white/5
+bg-white/[0.06]
+
 border
 border-white/10
 
@@ -700,7 +449,9 @@ rounded-3xl
 
 p-6
 
-backdrop-blur-xl
+hover:border-purple-500/40
+
+transition
 
 "
 
@@ -708,13 +459,15 @@ backdrop-blur-xl
 
 
 <div className="
-flex
-justify-between
-items-center
+text-purple-400
+mb-5
 ">
 
+{card.icon}
 
-<div>
+</div>
+
+
 
 
 <p className="
@@ -728,9 +481,9 @@ text-gray-400
 
 
 <h2 className="
-text-3xl
+text-4xl
 font-bold
-mt-3
+mt-2
 ">
 
 {card.value}
@@ -739,30 +492,23 @@ mt-3
 
 
 
-</div>
-
-
-
-
 <div className="
-w-14
-h-14
-rounded-2xl
-
-bg-purple-600/20
-
 flex
 items-center
-justify-center
+gap-2
 
-text-purple-400
+text-green-400
+
+text-sm
+
+mt-4
+
 ">
 
 
-{card.icon}
+<TrendingUp size={16}/>
 
-
-</div>
+Growing
 
 
 </div>
@@ -789,315 +535,43 @@ text-purple-400
 
 
 
-<div className="
-grid
-lg:grid-cols-3
-gap-8
-">
 
 
 
 
+{/* CHART */}
 
-
-
-
-<div className="
-bg-white/5
-border
-border-white/10
-rounded-3xl
-p-6
-">
-
-
-<h2 className="
-text-xl
-font-bold
-mb-5
-">
-
-Recent Clients
-
-</h2>
-
-
-
-
-{
-
-recentClients.map(client=>(
 
 
 <div
 
-key={client.id}
-
 className="
-bg-black/20
-rounded-xl
-p-4
-mb-4
-">
+bg-white/[0.06]
 
-
-<h3 className="
-font-semibold
-">
-
-{client.name}
-
-</h3>
-
-
-<p className="
-text-sm
-text-gray-400
-">
-
-{client.email}
-
-</p>
-
-
-
-</div>
-
-
-))
-
-
-}
-
-
-
-</div>
-
-
-
-
-
-
-
-
-
-<div className="
-bg-white/5
 border
 border-white/10
+
 rounded-3xl
-p-6
-">
 
-
-<h2 className="
-text-xl
-font-bold
-mb-5
-">
-
-Recent Websites
-
-</h2>
-
-
-
-{
-
-recentWebsites.map(site=>(
-
-
-<div
-
-key={site.id}
-
-className="
-bg-black/20
-rounded-xl
-p-4
-mb-4
-flex
-justify-between
-">
-
-
-<span>
-
-{site.title}
-
-</span>
-
-
-
-<span className="
-text-green-400
-">
-
-{site.status}
-
-</span>
-
-
-
-</div>
-
-
-))
-
-
-}
-
-
-
-</div>
-
-
-
-
-
-
-
-
-
-<div className="
-bg-white/5
-border
-border-white/10
-rounded-3xl
-p-6
-">
-
-
-<h2 className="
-text-xl
-font-bold
-mb-5
-flex
-gap-2
-items-center
-">
-
-<CreditCard/>
-
-Payments
-
-</h2>
-
-
-
-
-
-{
-
-recentPayments.length===0 ?
-
-
-<p className="
-text-gray-400
-">
-
-No Payments Yet
-
-</p>
-
-
-
-:
-
-
-recentPayments.map(payment=>(
-
-
-<div
-
-key={payment.id}
-
-className="
-bg-black/20
-rounded-xl
-p-4
-mb-4
-">
-
-
-<h3>
-
-{payment.name}
-
-</h3>
-
-
-<p className="
-text-gray-400
-">
-
-{payment.plan}
-
-</p>
-
-
-<p className="
-text-green-400
-font-bold
-">
-
-₹{payment.amount}
-
-</p>
-
-
-
-</div>
-
-
-))
-
-
-}
-
-
-
-</div>
-
-
-
-
-
-
-
-</div>
-
-
-
-
-
-
-
-
-
-<div className="
-bg-white/5
-border
-border-white/10
-rounded-3xl
 p-8
-">
+
+"
+
+
+>
 
 
 <div className="
 flex
 items-center
 gap-3
-mb-5
+mb-8
 ">
 
 
 <Activity
-className="
-text-green-400
-"
+className="text-purple-400"
 />
-
 
 
 <h2 className="
@@ -1105,7 +579,7 @@ text-2xl
 font-bold
 ">
 
-Platform Health
+Website Growth
 
 </h2>
 
@@ -1115,26 +589,199 @@ Platform Health
 
 
 
+
+
+
+<ResponsiveContainer
+
+width="100%"
+
+height={350}
+
+>
+
+
+<LineChart data={chart}>
+
+
+<CartesianGrid
+strokeDasharray="3 3"
+/>
+
+
+<XAxis
+dataKey="name"
+/>
+
+
+<YAxis/>
+
+
+
+<Tooltip/>
+
+
+
+
+
+<Line
+
+type="monotone"
+
+dataKey="visitors"
+
+strokeWidth={3}
+
+/>
+
+
+
+
+</LineChart>
+
+
+</ResponsiveContainer>
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+{/* QUICK STATS */}
+
+
+
+<div
+
+className="
+grid
+md:grid-cols-3
+gap-6
+"
+
+>
+
+
+
 <div className="
-space-y-3
-text-gray-300
+bg-green-500/10
+border
+border-green-500/20
+rounded-3xl
+p-6
 ">
 
 
-<p>🟢 Firebase Online</p>
+<h3 className="
+text-gray-400
+">
 
-<p>🟢 Authentication Online</p>
+Published Websites
 
-<p>🟢 Database Online</p>
+</h3>
 
-<p>🟢 Payments Online</p>
+
+<p className="
+text-3xl
+font-bold
+mt-2
+text-green-400
+">
+
+{stats.published}
+
+</p>
+
+
+</div>
+
+
+
+
+
+<div className="
+bg-blue-500/10
+border
+border-blue-500/20
+rounded-3xl
+p-6
+">
+
+
+<h3 className="
+text-gray-400
+">
+
+Active Users
+
+</h3>
+
+
+<p className="
+text-3xl
+font-bold
+mt-2
+text-blue-400
+">
+
+{stats.clients}
+
+</p>
+
+
+</div>
+
+
+
+
+
+<div className="
+bg-purple-500/10
+border
+border-purple-500/20
+rounded-3xl
+p-6
+">
+
+
+<h3 className="
+text-gray-400
+">
+
+Monthly Revenue
+
+</h3>
+
+
+<p className="
+text-3xl
+font-bold
+mt-2
+text-purple-400
+">
+
+₹{stats.revenue}
+
+</p>
+
+
+</div>
+
 
 
 
 </div>
 
 
-</div>
 
 
 
@@ -1146,9 +793,7 @@ text-gray-300
 
 )
 
-
 }
-
 
 
 
