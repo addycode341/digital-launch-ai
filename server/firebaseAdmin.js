@@ -1,4 +1,5 @@
-import admin from "firebase-admin";
+import { initializeApp, cert } from "firebase-admin/app";
+import { getFirestore } from "firebase-admin/firestore";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -15,16 +16,14 @@ const serviceAccount = {
 };
 
 
-admin.initializeApp({
+initializeApp({
 
-    credential: admin.credential.cert(serviceAccount)
+    credential: cert(serviceAccount)
 
 });
 
 
-const db = admin.firestore();
+const db = getFirestore();
 
 
 export { db };
-
-export default admin;
