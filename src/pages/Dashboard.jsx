@@ -1,4 +1,4 @@
-import React,{
+import React, {
 useEffect,
 useState
 } from "react";
@@ -48,7 +48,6 @@ function Dashboard(){
 const navigate = useNavigate();
 
 
-
 const [userPlan,setUserPlan]=useState("Starter");
 
 const [loading,setLoading]=useState(true);
@@ -57,16 +56,11 @@ const [loading,setLoading]=useState(true);
 
 
 
-
-
 useEffect(()=>{
-
 
 loadPlan();
 
-
 },[]);
-
 
 
 
@@ -108,6 +102,7 @@ user.uid
 
 
 
+
 if(userDoc.exists()){
 
 
@@ -115,11 +110,8 @@ const data=userDoc.data();
 
 
 setUserPlan(
-
 data.plan || "Starter"
-
 );
-
 
 
 }
@@ -130,24 +122,19 @@ data.plan || "Starter"
 
 catch(error){
 
-
 console.log(error);
 
-
 }
+
 
 finally{
 
-
 setLoading(false);
-
 
 }
 
 
-
 };
-
 
 
 
@@ -161,20 +148,25 @@ if(loading){
 
 return(
 
-<div className="
+<div
+
+className="
 min-h-screen
+bg-slate-950
 flex
 items-center
 justify-center
 text-white
-">
+text-xl
+"
+
+>
 
 Loading Dashboard 🚀
 
 </div>
 
 )
-
 
 }
 
@@ -183,10 +175,9 @@ Loading Dashboard 🚀
 
 
 
+const currentFeatures =
+plansFeatures[userPlan];
 
-
-
-const currentFeatures = plansFeatures[userPlan];
 
 
 
@@ -206,30 +197,33 @@ key:"builder"
 {
 name:"Analytics",
 icon:<BarChart3/>,
-key:"analytics"
+key:"analytics",
+premium:true
 },
 
 
 {
 name:"SEO Report",
 icon:<Search/>,
-key:"seo"
+key:"seo",
+premium:true
 },
 
 
 {
 name:"Leads",
 icon:<Users/>,
-key:"leads"
+key:"leads",
+premium:true
 },
 
 
 {
 name:"AI Growth Tools",
 icon:<Sparkles/>,
-key:"aiGrowth"
+key:"aiGrowth",
+premium:true
 }
-
 
 
 ];
@@ -241,14 +235,18 @@ key:"aiGrowth"
 
 
 
-
 return(
 
 
-<div className="
+<div
+
+className="
 text-white
 space-y-10
-">
+"
+
+>
+
 
 
 
@@ -260,10 +258,14 @@ space-y-10
 <div>
 
 
-<h1 className="
+<h1
+
+className="
 text-4xl
 font-bold
-">
+"
+
+>
 
 Welcome Back 👋
 
@@ -271,10 +273,14 @@ Welcome Back 👋
 
 
 
-<p className="
+<p
+
+className="
 text-gray-400
 mt-2
-">
+"
+
+>
 
 Manage your DigitalLaunch AI growth
 
@@ -296,50 +302,61 @@ Manage your DigitalLaunch AI growth
 
 
 
-<div className="
+<div
+
+className="
 bg-gradient-to-br
 from-purple-600/20
 to-blue-600/20
-
 border
 border-white/10
-
 rounded-3xl
-
 p-8
-">
+"
+
+>
 
 
+<div
 
-<div className="
+className="
 flex
 justify-between
 items-center
-">
+"
+
+>
 
 
 <div>
 
 
-<p className="
+<p
+
+className="
 text-gray-400
-">
+"
+
+>
 
 Current Plan
 
 </p>
 
 
-<h2 className="
+<h2
+
+className="
 text-4xl
 font-bold
 mt-2
-">
+"
+
+>
 
 {userPlan}
 
 </h2>
-
 
 
 </div>
@@ -363,6 +380,53 @@ text-yellow-400
 
 
 
+
+
+
+
+{
+
+userPlan==="Premium" &&
+
+<button
+
+
+onClick={()=>navigate("/premium-dashboard")}
+
+
+className="
+mt-6
+px-6
+py-3
+rounded-xl
+bg-gradient-to-r
+from-yellow-400
+to-orange-500
+text-black
+font-bold
+flex
+items-center
+gap-2
+"
+
+>
+
+
+<Crown size={20}/>
+
+
+Open Premium Dashboard
+
+
+</button>
+
+
+}
+
+
+
+
+
 </div>
 
 
@@ -373,10 +437,14 @@ text-yellow-400
 
 
 
-<h2 className="
+<h2
+
+className="
 text-3xl
 font-bold
-">
+"
+
+>
 
 Your Features 🚀
 
@@ -389,12 +457,18 @@ Your Features 🚀
 
 
 
-<div className="
+
+<div
+
+className="
 grid
 md:grid-cols-2
 xl:grid-cols-3
 gap-6
-">
+"
+
+>
+
 
 
 
@@ -405,7 +479,11 @@ features.map((item,index)=>{
 
 const unlocked =
 
-currentFeatures?.[item.key];
+currentFeatures?.[item.key]
+
+&&
+
+(!item.premium || userPlan==="Premium");
 
 
 
@@ -416,53 +494,65 @@ return(
 
 <div
 
+
 key={index}
+
 
 className="
 bg-white/[0.05]
-
 border
 border-white/10
-
 rounded-3xl
-
 p-6
 "
 
 >
 
 
-<div className="
+
+
+<div
+
+className="
 w-14
 h-14
-
 rounded-2xl
-
 bg-purple-600/20
-
 flex
 items-center
 justify-center
-
 text-purple-400
-">
+"
+
+>
+
 
 {item.icon}
+
 
 </div>
 
 
 
 
-<h3 className="
+
+
+
+<h3
+
+className="
 text-xl
 font-bold
 mt-5
-">
+"
+
+>
 
 {item.name}
 
 </h3>
+
+
 
 
 
@@ -476,71 +566,90 @@ unlocked ?
 
 
 
-<div className="
+<div
+
+className="
 flex
 gap-2
 items-center
 text-green-400
 mt-4
-">
+"
+
+>
+
 
 <CheckCircle size={18}/>
 
+
 Unlocked
 
+
 </div>
+
 
 
 
 :
 
 
+
 <div>
 
 
-<div className="
+<div
+
+className="
 flex
 gap-2
 items-center
 text-gray-500
 mt-4
-">
+"
+
+>
+
 
 <Lock size={18}/>
 
-Locked
+
+Premium Only
+
 
 </div>
+
 
 
 
 
 <button
 
+
 onClick={()=>navigate("/#pricing")}
+
+
 
 className="
 mt-4
 px-5
 py-2
-
 rounded-xl
-
 bg-gradient-to-r
 from-purple-600
 to-blue-600
-
 "
 
 >
 
+
 Upgrade 🚀
+
 
 </button>
 
 
-</div>
 
+</div>
 
 
 }
@@ -553,7 +662,6 @@ Upgrade 🚀
 )
 
 
-
 })
 
 
@@ -561,7 +669,13 @@ Upgrade 🚀
 
 
 
+
+
 </div>
+
+
+
+
 
 
 
@@ -575,40 +689,56 @@ Upgrade 🚀
 
 
 
-<div className="
-bg-white/[0.05]
+<div
 
+className="
+bg-white/[0.05]
 border
 border-white/10
-
 rounded-3xl
-
 p-8
-">
+"
+
+>
 
 
-<h2 className="
+
+<h2
+
+className="
 text-2xl
 font-bold
-">
+"
+
+>
+
 
 {userPlan} Plan Includes
+
 
 </h2>
 
 
 
-<div className="
+
+
+<div
+
+className="
 grid
 md:grid-cols-2
 gap-5
 mt-6
-">
+"
+
+>
 
 
 {
 
+
 Object.keys(currentFeatures || {}).map((item)=>(
+
 
 
 currentFeatures[item] &&
@@ -642,6 +772,7 @@ text-green-400
 {item}
 
 
+
 </div>
 
 
@@ -653,12 +784,16 @@ text-green-400
 
 
 
+
+
 </div>
 
 
 
-</div>
 
+
+
+</div>
 
 
 

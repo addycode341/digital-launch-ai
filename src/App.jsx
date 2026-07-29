@@ -50,7 +50,7 @@ import Leads from "./pages/Admin/Leads";
 import ThankYou from "./pages/ThankYou";
 import AdminProtectedRoute from "./components/AdminProtectedRoute";
 import AdminLayout from "./pages/Admin/AdminLayout";
-
+import PremiumDashboard from "./pages/PremiumDashboard";
 
 
 // DEMO TEMPLATES
@@ -158,7 +158,10 @@ path="/dashboard"
 element={<Dashboard/>}
 />
 
-
+<Route
+path="/premium-dashboard"
+element={<PremiumDashboard />}
+/>
 
 <Route
 path="/builder"
