@@ -10,19 +10,19 @@ const serviceAccount = {
 
   clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
 
-  privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n")
+  privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g,"\n")
 
 };
 
 
 
-if(!admin.apps.length){
+if(admin.apps.length === 0){
 
-admin.initializeApp({
+  admin.initializeApp({
 
-credential: admin.credential.cert(serviceAccount)
+    credential: admin.credential.cert(serviceAccount)
 
-});
+  });
 
 }
 
