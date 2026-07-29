@@ -11,7 +11,6 @@ import {
 import { useEffect, useState } from "react";
 
 
-
 function Payment(){
 
 
@@ -19,6 +18,11 @@ const navigate = useNavigate();
 
 
 const [plan,setPlan] = useState(null);
+const [loading,setLoading] = useState(false);
+
+
+
+const API_URL = "http://localhost:5000";
 
 
 
@@ -27,9 +31,8 @@ const [plan,setPlan] = useState(null);
 useEffect(()=>{
 
 
-const savedPlan = localStorage.getItem(
-"selectedPlan"
-);
+const savedPlan =
+localStorage.getItem("selectedPlan");
 
 
 if(savedPlan){
@@ -53,11 +56,15 @@ const handlePayment = async()=>{
 try{
 
 
+setLoading(true);
+
+
+
 // CREATE ORDER
 
 const response = await fetch(
 
-"http://localhost:5000/create-order",
+`${API_URL}/create-order`,
 
 {
 
@@ -83,13 +90,18 @@ planName:plan.name
 
 
 
+
+
 const data = await response.json();
+
 
 
 
 if(!data.success){
 
 alert("Order create failed");
+
+setLoading(false);
 
 return;
 
@@ -101,10 +113,7 @@ return;
 
 
 
-// RAZORPAY OPTIONS
-
-
-const options={
+const options = {
 
 
 key:data.key,
@@ -119,7 +128,8 @@ currency:data.currency,
 name:"DigitalLaunch AI",
 
 
-description:`${plan.name} Website Plan`,
+description:
+`${plan.name} Website Plan`,
 
 
 order_id:data.orderId,
@@ -127,25 +137,129 @@ order_id:data.orderId,
 
 
 
-handler:function(response){
+
+handler: async function(paymentResponse){
 
 
-console.log(
-"PAYMENT SUCCESS",
-response
+
+
+
+try{
+
+
+
+const verifyResponse =
+await fetch(
+
+`${API_URL}/verify-payment`,
+
+{
+
+method:"POST",
+
+headers:{
+
+"Content-Type":"application/json"
+
+},
+
+
+body:JSON.stringify({
+
+
+razorpay_order_id:
+paymentResponse.razorpay_order_id,
+
+
+razorpay_payment_id:
+paymentResponse.razorpay_payment_id,
+
+
+razorpay_signature:
+paymentResponse.razorpay_signature,
+
+
+name:"Customer",
+
+
+email:"",
+
+
+planName:plan.name,
+
+
+amount:plan.price
+
+
+
+})
+
+}
+
 );
 
+
+
+
+
+const result =
+await verifyResponse.json();
+
+
+
+
+
+if(result.success){
+
+
+localStorage.removeItem(
+"selectedPlan"
+);
+
+
+
+navigate("/thank-you");
+
+
+}
+
+else{
 
 
 alert(
-"Payment Successful 🚀"
+"Payment verification failed"
 );
 
 
-// yaha verify-payment call add karenge
+}
+
+
+
+}
+
+
+catch(error){
+
+
+console.log(
+"VERIFY ERROR",
+error
+);
+
+
+alert(
+"Verification error"
+);
+
+
+}
+
+
 
 
 },
+
+
 
 
 
@@ -155,10 +269,15 @@ prefill:{
 
 name:"",
 
-email:""
+
+email:"",
+
+
+contact:""
 
 
 },
+
 
 
 
@@ -170,8 +289,6 @@ color:"#9333ea"
 
 }
 
-
-
 };
 
 
@@ -179,12 +296,38 @@ color:"#9333ea"
 
 
 
-const razorpay = new window.Razorpay(options);
+
+const razorpay =
+new window.Razorpay(options);
+
+
+
+
+
+razorpay.on(
+"payment.failed",
+function(response){
+
+
+console.log(
+"PAYMENT FAILED",
+response
+);
+
+
+alert(
+"Payment Failed"
+);
+
+
+}
+);
+
+
+
 
 
 razorpay.open();
-
-
 
 
 
@@ -208,10 +351,17 @@ alert(
 }
 
 
+finally{
+
+
+setLoading(false);
+
+
+}
+
+
 
 };
-
-
 
 
 
@@ -243,13 +393,7 @@ Loading Plan...
 
 )
 
-
 }
-
-
-
-
-
 
 
 
@@ -270,10 +414,7 @@ py-20
 text-white
 "
 
-
 >
-
-
 
 
 <div
@@ -291,7 +432,6 @@ left-1/2
 "
 
 />
-
 
 
 
@@ -316,28 +456,19 @@ items-center
 
 
 
-
-
-
-
-{/* PLAN CARD */}
-
-
+{/* PLAN */}
 
 <motion.div
-
 
 initial={{
 opacity:0,
 x:-40
 }}
 
-
 animate={{
 opacity:1,
 x:0
 }}
-
 
 className="
 bg-white/10
@@ -352,20 +483,14 @@ p-8
 
 
 
-<div
-
-className="
+<div className="
 flex
 items-center
 gap-3
-"
-
->
+">
 
 
-<div
-
-className="
+<div className="
 w-14
 h-14
 rounded-2xl
@@ -375,9 +500,8 @@ to-pink-500
 flex
 items-center
 justify-center
-"
+">
 
->
 
 <Rocket/>
 
@@ -385,16 +509,14 @@ justify-center
 
 
 
-<h1
-
-className="
+<h1 className="
 text-3xl
 font-black
-"
+">
 
->
 
 {plan.name}
+
 
 </h1>
 
@@ -405,14 +527,10 @@ font-black
 
 
 
-<p
-
-className="
+<p className="
 mt-5
 text-gray-400
-"
-
->
+">
 
 {plan.desc}
 
@@ -421,36 +539,24 @@ text-gray-400
 
 
 
-
-<div
-
-className="
+<div className="
 mt-6
-"
+">
 
->
 
-<span
-
-className="
+<span className="
 text-5xl
 font-black
-"
-
->
+">
 
 ₹{plan.price}
 
 </span>
 
 
-<span
-
-className="
+<span className="
 text-gray-400
-"
-
->
+">
 
 {plan.period}
 
@@ -463,21 +569,15 @@ text-gray-400
 
 
 
-
-
-<ul
-
-className="
+<ul className="
 mt-8
 space-y-4
-"
-
->
+">
 
 
 {
 
-plan.featuresText?.map((item,index)=>(
+plan.featuresText.map((item,index)=>(
 
 
 <li
@@ -513,13 +613,10 @@ text-pink-400
 
 ))
 
-
 }
 
 
-
 </ul>
-
 
 
 
@@ -533,28 +630,20 @@ text-pink-400
 
 
 
-
-
-
-
-{/* PAYMENT CARD */}
-
+{/* PAYMENT */}
 
 
 <motion.div
-
 
 initial={{
 opacity:0,
 x:40
 }}
 
-
 animate={{
 opacity:1,
 x:0
 }}
-
 
 className="
 bg-white/[0.07]
@@ -568,15 +657,10 @@ backdrop-blur-xl
 >
 
 
-
-<h2
-
-className="
+<h2 className="
 text-3xl
 font-bold
-"
-
->
+">
 
 Complete Payment 🚀
 
@@ -585,61 +669,40 @@ Complete Payment 🚀
 
 
 
-
-<p
-
-className="
+<p className="
 mt-3
 text-gray-400
-"
+">
 
->
-
-Activate your website plan and start your digital journey.
+Activate your website plan.
 
 </p>
 
 
 
 
-
-
-
-<div
-
-className="
+<div className="
 mt-8
 space-y-5
-"
-
->
+">
 
 
-<div
-
-className="
+<div className="
 flex
 items-center
 gap-4
 bg-white/10
 p-4
 rounded-2xl
-"
-
->
+">
 
 
 <CreditCard
-
-className="
-text-purple-400
-"
-
+className="text-purple-400"
 />
 
 
 <div>
-
 
 <h4 className="font-bold">
 
@@ -663,35 +726,22 @@ UPI • Card • Net Banking
 
 
 
-
-
-
-
-<div
-
-className="
+<div className="
 flex
 items-center
 gap-4
 bg-white/10
 p-4
 rounded-2xl
-"
-
->
+">
 
 
 <ShieldCheck
-
-className="
-text-green-400
-"
-
+className="text-green-400"
 />
 
 
 <div>
-
 
 <h4 className="font-bold">
 
@@ -702,7 +752,7 @@ Secure Hosting
 
 <p className="text-sm text-gray-400">
 
-Website protection included
+SSL Protected Payment
 
 </p>
 
@@ -722,12 +772,11 @@ Website protection included
 
 
 
-
 <button
-
 
 onClick={handlePayment}
 
+disabled={loading}
 
 className="
 mt-8
@@ -740,12 +789,26 @@ to-pink-500
 font-bold
 hover:scale-105
 transition
+disabled:opacity-50
 "
 
 >
 
 
-Pay ₹{plan.price} 🚀
+{
+
+loading
+
+?
+
+"Processing..."
+
+:
+
+`Pay ₹${plan.price} 🚀`
+
+}
+
 
 
 </button>
@@ -757,9 +820,7 @@ Pay ₹{plan.price} 🚀
 
 <button
 
-
 onClick={()=>navigate("/")}
-
 
 className="
 mt-4
@@ -767,18 +828,13 @@ w-full
 py-3
 rounded-xl
 bg-white/10
-hover:bg-white/20
-transition
 "
 
 >
 
-
 Back Home
 
-
 </button>
-
 
 
 
@@ -790,19 +846,13 @@ Back Home
 
 
 
-
-
 </div>
-
-
-
 
 
 </section>
 
 
 )
-
 
 }
 
