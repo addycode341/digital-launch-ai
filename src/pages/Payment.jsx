@@ -1,11 +1,13 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+
 import {
-CheckCircle,
-CreditCard,
-ShieldCheck,
-Rocket
+  CheckCircle,
+  CreditCard,
+  ShieldCheck,
+  Rocket
 } from "lucide-react";
+
 import { useEffect, useState } from "react";
 
 
@@ -13,18 +15,21 @@ import { useEffect, useState } from "react";
 function Payment(){
 
 
-const navigate=useNavigate();
+const navigate = useNavigate();
 
 
-const [plan,setPlan]=useState(null);
+const [plan,setPlan] = useState(null);
+
+
 
 
 
 useEffect(()=>{
 
 
-const savedPlan=
-localStorage.getItem("selectedPlan");
+const savedPlan = localStorage.getItem(
+"selectedPlan"
+);
 
 
 if(savedPlan){
@@ -40,28 +45,209 @@ setPlan(JSON.parse(savedPlan));
 
 
 
+
+
+const handlePayment = async()=>{
+
+
+try{
+
+
+// CREATE ORDER
+
+const response = await fetch(
+
+"http://localhost:5000/create-order",
+
+{
+
+method:"POST",
+
+headers:{
+
+"Content-Type":"application/json"
+
+},
+
+body:JSON.stringify({
+
+amount:plan.price,
+
+planName:plan.name
+
+})
+
+}
+
+);
+
+
+
+const data = await response.json();
+
+
+
+if(!data.success){
+
+alert("Order create failed");
+
+return;
+
+}
+
+
+
+
+
+
+
+// RAZORPAY OPTIONS
+
+
+const options={
+
+
+key:data.key,
+
+
+amount:data.amount,
+
+
+currency:data.currency,
+
+
+name:"DigitalLaunch AI",
+
+
+description:`${plan.name} Website Plan`,
+
+
+order_id:data.orderId,
+
+
+
+
+handler:function(response){
+
+
+console.log(
+"PAYMENT SUCCESS",
+response
+);
+
+
+
+alert(
+"Payment Successful 🚀"
+);
+
+
+// yaha verify-payment call add karenge
+
+
+},
+
+
+
+
+prefill:{
+
+
+name:"",
+
+email:""
+
+
+},
+
+
+
+theme:{
+
+
+color:"#9333ea"
+
+
+}
+
+
+
+};
+
+
+
+
+
+
+const razorpay = new window.Razorpay(options);
+
+
+razorpay.open();
+
+
+
+
+
+}
+
+
+catch(error){
+
+
+console.log(
+"PAYMENT ERROR",
+error
+);
+
+
+alert(
+"Payment failed"
+);
+
+
+}
+
+
+
+};
+
+
+
+
+
+
+
+
+
 if(!plan){
+
 
 return(
 
-<div className="
+<div
+
+className="
 min-h-screen
 bg-slate-950
 flex
 items-center
 justify-center
 text-white
-">
+"
 
+>
 
 Loading Plan...
-
 
 </div>
 
 )
 
+
 }
+
+
+
 
 
 
@@ -76,19 +262,12 @@ return(
 
 className="
 min-h-screen
-
 bg-[#050816]
-
 relative
-
 overflow-hidden
-
 px-5
-
 py-20
-
 text-white
-
 "
 
 
@@ -96,31 +275,19 @@ text-white
 
 
 
-{/* Glow */}
-
-
 
 <div
 
 className="
 absolute
-
 w-[500px]
-
 h-[500px]
-
 bg-purple-600/30
-
 blur-[160px]
-
 rounded-full
-
 top-0
-
 left-1/2
-
 -translate-x-1/2
-
 "
 
 />
@@ -129,27 +296,19 @@ left-1/2
 
 
 
+
 <div
 
 className="
 relative
-
 z-10
-
 max-w-5xl
-
 mx-auto
-
 grid
-
 lg:grid-cols-2
-
 gap-10
-
 items-center
-
 "
-
 
 >
 
@@ -180,22 +339,14 @@ x:0
 }}
 
 
-
 className="
 bg-white/10
-
 border
-
 border-white/10
-
 backdrop-blur-xl
-
 rounded-[35px]
-
 p-8
-
 "
-
 
 >
 
@@ -205,11 +356,8 @@ p-8
 
 className="
 flex
-
 items-center
-
 gap-3
-
 "
 
 >
@@ -219,23 +367,14 @@ gap-3
 
 className="
 w-14
-
 h-14
-
 rounded-2xl
-
 bg-gradient-to-r
-
 from-purple-600
-
 to-pink-500
-
 flex
-
 items-center
-
 justify-center
-
 "
 
 >
@@ -245,17 +384,19 @@ justify-center
 </div>
 
 
-<h1 className="
+
+<h1
+
+className="
 text-3xl
 font-black
-">
+"
 
+>
 
 {plan.name}
 
-
 </h1>
-
 
 
 </div>
@@ -264,16 +405,16 @@ font-black
 
 
 
+<p
 
-
-<p className="
+className="
 mt-5
 text-gray-400
-">
+"
 
+>
 
 {plan.desc}
-
 
 </p>
 
@@ -281,32 +422,37 @@ text-gray-400
 
 
 
+<div
 
-
-<div className="
+className="
 mt-6
-">
+"
 
+>
 
-<span className="
+<span
+
+className="
 text-5xl
 font-black
-">
+"
 
+>
 
 ₹{plan.price}
-
 
 </span>
 
 
-<span className="
-text-gray-400
-">
+<span
 
+className="
+text-gray-400
+"
+
+>
 
 {plan.period}
-
 
 </span>
 
@@ -319,16 +465,17 @@ text-gray-400
 
 
 
+<ul
 
-
-<ul className="
+className="
 mt-8
 space-y-4
-">
+"
+
+>
 
 
 {
-
 
 plan.featuresText?.map((item,index)=>(
 
@@ -343,7 +490,6 @@ gap-3
 items-center
 text-gray-300
 "
-
 
 >
 
@@ -378,7 +524,6 @@ text-pink-400
 
 
 
-
 </motion.div>
 
 
@@ -392,8 +537,7 @@ text-pink-400
 
 
 
-
-{/* PAYMENT BOX */}
+{/* PAYMENT CARD */}
 
 
 
@@ -412,37 +556,29 @@ x:0
 }}
 
 
-
 className="
 bg-white/[0.07]
-
 border
-
 border-white/10
-
 rounded-[35px]
-
 p-8
-
 backdrop-blur-xl
-
 "
-
 
 >
 
 
 
+<h2
 
-
-<h2 className="
+className="
 text-3xl
 font-bold
-">
+"
 
+>
 
 Complete Payment 🚀
-
 
 </h2>
 
@@ -450,15 +586,16 @@ Complete Payment 🚀
 
 
 
+<p
 
-<p className="
+className="
 mt-3
 text-gray-400
-">
+"
 
+>
 
 Activate your website plan and start your digital journey.
-
 
 </p>
 
@@ -468,91 +605,102 @@ Activate your website plan and start your digital journey.
 
 
 
+<div
 
-
-<div className="
+className="
 mt-8
 space-y-5
 "
 
-
 >
 
 
-<div className="
+<div
+
+className="
 flex
 items-center
 gap-4
 bg-white/10
 p-4
 rounded-2xl
-">
+"
+
+>
 
 
-<CreditCard className="
+<CreditCard
+
+className="
 text-purple-400
-"/>
+"
+
+/>
 
 
 <div>
 
-<h4 className="
-font-bold
-">
+
+<h4 className="font-bold">
 
 Secure Payment
 
 </h4>
 
-<p className="
-text-sm
-text-gray-400
-">
+
+<p className="text-sm text-gray-400">
 
 UPI • Card • Net Banking
 
 </p>
 
-</div>
-
 
 </div>
 
 
+</div>
 
 
 
 
-<div className="
+
+
+
+
+<div
+
+className="
 flex
 items-center
 gap-4
 bg-white/10
 p-4
 rounded-2xl
-">
+"
+
+>
 
 
-<ShieldCheck className="
+<ShieldCheck
+
+className="
 text-green-400
-"/>
+"
+
+/>
 
 
 <div>
 
-<h4 className="
-font-bold
-">
+
+<h4 className="font-bold">
 
 Secure Hosting
 
 </h4>
 
 
-<p className="
-text-sm
-text-gray-400
-">
+<p className="text-sm text-gray-400">
 
 Website protection included
 
@@ -575,33 +723,24 @@ Website protection included
 
 
 
-
 <button
+
+
+onClick={handlePayment}
 
 
 className="
 mt-8
-
 w-full
-
 py-4
-
 rounded-2xl
-
 bg-gradient-to-r
-
 from-purple-600
-
 to-pink-500
-
 font-bold
-
 hover:scale-105
-
 transition
-
 "
-
 
 >
 
@@ -615,6 +754,7 @@ Pay ₹{plan.price} 🚀
 
 
 
+
 <button
 
 
@@ -623,21 +763,13 @@ onClick={()=>navigate("/")}
 
 className="
 mt-4
-
 w-full
-
 py-3
-
 rounded-xl
-
 bg-white/10
-
 hover:bg-white/20
-
 transition
-
 "
-
 
 >
 
@@ -646,8 +778,6 @@ Back Home
 
 
 </button>
-
-
 
 
 
@@ -663,7 +793,6 @@ Back Home
 
 
 </div>
-
 
 
 
