@@ -47,7 +47,7 @@ import AdminPreview from "./pages/Admin/AdminPreview";
 import ClientDetail from "./pages/Admin/ClientDetail";
 import Payments from "./pages/Admin/Payments";
 import Leads from "./pages/Admin/Leads";
-
+import ThankYou from "./pages/ThankYou";
 import AdminProtectedRoute from "./components/AdminProtectedRoute";
 import AdminLayout from "./pages/Admin/AdminLayout";
 
@@ -333,7 +333,10 @@ element={<AdminAnalytics/>}
 path="/admin/preview/:id"
 element={<AdminPreview/>}
 />
-
+<Route 
+path="/thank-you" 
+element={<ThankYou />} 
+/>
 
 </Route>
 
