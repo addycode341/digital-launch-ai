@@ -31,3 +31,6 @@ serviceAccountKey.json
 server/serviceAccountKey.json
 
 # Firebase credentials
+
+.vercel
+.env*
