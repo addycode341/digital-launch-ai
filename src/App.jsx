@@ -79,8 +79,16 @@ import Salon from "./Template/Salon/SalonWebsite";
 import HotelWebsite from "./Template/Hotel/HotelWebsite";
 import MobileStoreWebsite from "./Template/MobileStore/MobileStoreWebsite";
 
+// INDIAN ENTERPRISES TEMPLATE
 
+import IndianEnterprises from "./Parth/IndianEnterprises/pages/Home";
 
+import Printing from "./Parth/IndianEnterprises/pages/Printing";
+import OfficeStationery from "./Parth/IndianEnterprises/pages/OfficeStationery";
+import SchoolStationery from "./Parth/IndianEnterprises/pages/SchoolStationery";
+import Leather from "./Parth/IndianEnterprises/pages/Leather";
+import ProductDetails from "./Parth/IndianEnterprises/pages/ProductDetails";
+import Services from "./Parth/IndianEnterprises/pages/Services";
 
 
 function App(){
@@ -227,8 +235,68 @@ element={<MobileStoreWebsite/>}
 />
 
 
+{/* ================= INDIAN ENTERPRISES ================= */}
 
 
+<Route
+
+path="/indian-enterprises"
+
+element={<IndianEnterprises/>}
+
+/>
+
+
+<Route
+
+path="/indian-enterprises/printing"
+
+element={<Printing/>}
+
+/>
+
+
+<Route
+
+path="/indian-enterprises/office-stationery"
+
+element={<OfficeStationery/>}
+
+/>
+
+
+<Route
+
+path="/indian-enterprises/school-stationery"
+
+element={<SchoolStationery/>}
+
+/>
+
+
+<Route
+
+path="/indian-enterprises/leather"
+
+element={<Leather/>}
+
+/>
+
+
+<Route
+
+path="/indian-enterprises/product/:id"
+
+element={<ProductDetails/>}
+
+/>
+<Route
+
+path="/indian-enterprises/services"
+
+element={<Services/>}
+
+/>
 
 
 
