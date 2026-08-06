@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import ProductCard from "../components/products/ProductCard";
 
+
 import {
 Briefcase,
 ShieldCheck,
@@ -18,7 +19,7 @@ const products=[
 {
 id:"leather-office-files",
 name:"Leather Office Files",
-image:"/images/leather.jpg",
+image:"/images/Leather files .jpeg",
 desc:"Premium leather files designed for corporate offices and professional presentations."
 },
 
@@ -26,31 +27,15 @@ desc:"Premium leather files designed for corporate offices and professional pres
 {
 id:"executive-leather-bags",
 name:"Executive Leather Bags",
-image:"/images/leather.jpg",
+image:"/images/Leather Bag.jpeg",
 desc:"Stylish executive bags with premium finishing and durable material."
-},
-
-
-{
-id:"leather-wallets",
-name:"Leather Wallets",
-image:"/images/leather.jpg",
-desc:"Elegant leather wallets with superior quality and professional look."
-},
-
-
-{
-id:"card-holders",
-name:"Leather Card Holders",
-image:"/images/leather.jpg",
-desc:"Premium business card holders for corporate professionals."
 },
 
 
 {
 id:"rexine-products",
 name:"Rexine Products",
-image:"/images/leather.jpg",
+image:"/images/rexine1.jpeg",
 desc:"High quality rexine products with customized solutions."
 },
 

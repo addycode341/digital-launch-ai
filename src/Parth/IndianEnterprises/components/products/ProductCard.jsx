@@ -3,10 +3,10 @@ import { MessageCircle, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 
-function ProductCard({product}){
+function ProductCard({product}) {
 
 
-return(
+return (
 
 <motion.div
 
@@ -64,7 +64,6 @@ duration-500
 />
 
 
-
 <div className="
 absolute
 top-4
@@ -84,8 +83,6 @@ Premium
 
 
 </div>
-
-
 
 
 
@@ -112,7 +109,7 @@ text-sm
 mb-6
 ">
 
-{product.desc}
+{product.description}
 
 </p>
 
@@ -128,7 +125,7 @@ gap-3
 
 <Link
 
-to={`/indian-enterprises/product/${product.id}`}
+to={`/indian-enterprises/product/${product.id.toLowerCase().replace(/\s+/g,"-")}`}
 
 className="
 flex-1
@@ -150,13 +147,12 @@ transition
 
 >
 
-
 View
 
 <ArrowRight size={16}/>
 
-
 </Link>
+
 
 
 
@@ -166,6 +162,8 @@ View
 href="https://wa.me/919999999999"
 
 target="_blank"
+
+rel="noreferrer"
 
 className="
 flex-1
@@ -196,6 +194,7 @@ Enquiry
 
 
 </div>
+
 
 
 </div>

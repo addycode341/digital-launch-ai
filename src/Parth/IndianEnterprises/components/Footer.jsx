@@ -1,11 +1,13 @@
 import { motion } from "framer-motion";
 
 import {
-MapPin,
-Phone,
-Mail,
-MessageCircle
+  MapPin,
+  Phone,
+  Mail,
+  MessageCircle,
+  ArrowUp
 } from "lucide-react";
+
 
 
 function Footer(){
@@ -40,42 +42,41 @@ behavior:"smooth"
 
 
 
-
 return(
 
 
 <footer
 
 className="
-bg-black
+relative
+bg-[#050505]
 text-white
+overflow-hidden
 border-t
 border-white/10
-pt-20
-pb-8
-relative
-overflow-hidden
 "
 
 >
 
 
-{/* Background Glow */}
+{/* Glow */}
 
 <div
 
 className="
 absolute
-right-0
 top-0
-w-96
-h-96
+left-1/2
+-translate-x-1/2
+w-[600px]
+h-[300px]
 bg-yellow-500/10
 blur-[120px]
 rounded-full
 "
 
 ></div>
+
 
 
 
@@ -89,18 +90,7 @@ mx-auto
 px-6
 relative
 z-10
-"
-
->
-
-
-<div
-
-className="
-grid
-sm:grid-cols-2
-lg:grid-cols-4
-gap-10
+pt-16
 "
 
 >
@@ -109,14 +99,16 @@ gap-10
 
 
 
-{/* BRAND */}
+
+{/* CTA */}
+
 
 
 <motion.div
 
 initial={{
 opacity:0,
-y:30
+y:40
 }}
 
 whileInView={{
@@ -128,7 +120,135 @@ viewport={{
 once:true
 }}
 
+className="
+bg-white/[0.04]
+border
+border-white/10
+rounded-3xl
+p-8
+md:p-12
+flex
+flex-col
+md:flex-row
+justify-between
+items-center
+gap-6
+"
+
 >
+
+
+<div>
+
+
+<h2
+
+className="
+text-3xl
+md:text-4xl
+font-bold
+"
+
+>
+
+Need Premium Printing?
+
+</h2>
+
+
+
+<p
+
+className="
+text-gray-400
+mt-3
+"
+
+>
+
+Quality printing solutions for businesses,
+schools and corporate requirements.
+
+</p>
+
+
+</div>
+
+
+
+
+
+
+<a
+
+href="https://wa.me/919810559753"
+
+target="_blank"
+
+rel="noreferrer"
+
+className="
+bg-yellow-500
+text-black
+px-7
+py-4
+rounded-full
+font-bold
+flex
+items-center
+gap-3
+hover:scale-105
+transition
+"
+
+>
+
+<MessageCircle size={20}/>
+
+Chat With Us
+
+</a>
+
+
+
+</motion.div>
+
+
+
+
+
+
+
+
+
+{/* FOOTER CONTENT */}
+
+
+
+<div
+
+className="
+grid
+lg:grid-cols-4
+md:grid-cols-2
+gap-10
+py-16
+"
+
+>
+
+
+
+
+
+
+
+
+{/* COMPANY */}
+
+
+
+<div>
 
 
 <h2
@@ -142,16 +262,14 @@ font-bold
 
 Indian
 
-<span className="
-text-yellow-500
-">
+<span className="text-yellow-500">
 
 Enterprises
 
 </span>
 
-</h2>
 
+</h2>
 
 
 
@@ -160,15 +278,15 @@ Enterprises
 className="
 text-gray-400
 mt-5
-text-sm
 leading-relaxed
+text-sm
 "
 
 >
 
-Premium printing services, office stationery,
-school supplies, leather and rexine products
-with modern technology and quality finishing.
+Your trusted printing partner for
+premium printing services, office stationery,
+school supplies and leather & rexine products.
 
 </p>
 
@@ -178,79 +296,20 @@ with modern technology and quality finishing.
 <div
 
 className="
-flex
-gap-4
 mt-6
-"
-
->
-
-
-<a
-
-href="#"
-
-className="
-w-11
-h-11
-rounded-full
-bg-white/5
-border
-border-white/10
-flex
-items-center
-justify-center
-font-bold
+text-yellow-500
+font-semibold
 text-sm
-hover:bg-yellow-500
-hover:text-black
-transition
 "
 
 >
 
-IG
-
-</a>
-
-
-
-
-
-<a
-
-href="#"
-
-className="
-w-11
-h-11
-rounded-full
-bg-white/5
-border
-border-white/10
-flex
-items-center
-justify-center
-font-bold
-text-sm
-hover:bg-yellow-500
-hover:text-black
-transition
-"
-
->
-
-FB
-
-</a>
-
-
+Premium Quality Printing Since Years
 
 </div>
 
 
-
-</motion.div>
+</div>
 
 
 
@@ -283,6 +342,7 @@ Services
 
 
 
+
 <ul
 
 className="
@@ -294,37 +354,43 @@ text-sm
 >
 
 
-<li className="hover:text-yellow-500 transition cursor-pointer">
+<li className="hover:text-yellow-500 transition">
 
-Printing Services
+Commercial Printing
 
 </li>
 
 
-<li className="hover:text-yellow-500 transition cursor-pointer">
+<li className="hover:text-yellow-500 transition">
 
 Office Stationery
 
 </li>
 
 
-<li className="hover:text-yellow-500 transition cursor-pointer">
+<li className="hover:text-yellow-500 transition">
 
-School Stationery
+School Supplies
 
 </li>
 
 
-<li className="hover:text-yellow-500 transition cursor-pointer">
+<li className="hover:text-yellow-500 transition">
 
 Leather & Rexine Products
 
 </li>
 
 
+<li className="hover:text-yellow-500 transition">
+
+Corporate Printing
+
+</li>
+
+
 
 </ul>
-
 
 
 </div>
@@ -336,7 +402,8 @@ Leather & Rexine Products
 
 
 
-{/* QUICK LINKS */}
+
+{/* LINKS */}
 
 
 
@@ -388,7 +455,6 @@ Home
 
 
 
-
 <li
 
 onClick={()=>scrollSection("about")}
@@ -401,10 +467,9 @@ transition
 
 >
 
-About
+About Us
 
 </li>
-
 
 
 
@@ -423,8 +488,6 @@ transition
 Gallery
 
 </li>
-
-
 
 
 
@@ -483,6 +546,7 @@ Contact
 
 
 
+
 <div
 
 className="
@@ -495,87 +559,37 @@ text-sm
 
 
 
-<p
 
-className="
-flex
-items-center
-gap-3
-"
 
->
+<div className="flex gap-3">
+
 
 <MapPin
 
-size={18}
+size={20}
 
-className="
-text-yellow-500
-"
+className="text-yellow-500 flex-shrink-0"
 
 />
 
-Your Business Address
+
+<p>
+
+Shop No.132/3,
+<br/>
+
+Kagaz Bhawan,
+<br/>
+
+Gali Batashan,
+<br/>
+
+Chawri Bazar,
+<br/>
+
+Delhi - 110006
 
 </p>
-
-
-
-
-
-<p
-
-className="
-flex
-items-center
-gap-3
-"
-
->
-
-<Phone
-
-size={18}
-
-className="
-text-yellow-500
-"
-
-/>
-
-+91 XXXXX XXXXX
-
-</p>
-
-
-
-
-
-
-<p
-
-className="
-flex
-items-center
-gap-3
-"
-
->
-
-<Mail
-
-size={18}
-
-className="
-text-yellow-500
-"
-
-/>
-
-info@indianenterprises.com
-
-</p>
-
 
 
 </div>
@@ -584,40 +598,85 @@ info@indianenterprises.com
 
 
 
+
+<div className="flex gap-3">
+
+
+<MapPin
+
+size={20}
+
+className="text-yellow-500 flex-shrink-0"
+
+/>
+
+
+<p>
+
+AG-329,
+<br/>
+
+Shalimar Bagh,
+<br/>
+
+New Delhi - 110088
+
+</p>
+
+
+</div>
+
+
+
+
+
+
+
+<div className="flex gap-3">
+
+
+<Phone
+
+size={20}
+
+className="text-yellow-500"
+
+/>
+
+
+<div>
 
 
 <a
 
-href="https://wa.me/919999999999"
+href="tel:+919810559753"
 
-target="_blank"
-
-className="
-mt-7
-inline-flex
-items-center
-gap-3
-bg-yellow-500
-text-black
-px-6
-py-3
-rounded-full
-font-semibold
-hover:scale-105
-transition
-"
+className="hover:text-yellow-500"
 
 >
 
-
-<MessageCircle size={20}/>
-
-Chat On WhatsApp
-
++91 9810559753
 
 </a>
 
 
+<br/>
+
+
+<a
+
+href="tel:+918130287709"
+
+className="hover:text-yellow-500"
+
+>
+
++91 8130287709
+
+</a>
+
+
+</div>
 
 
 </div>
@@ -628,12 +687,59 @@ Chat On WhatsApp
 
 
 
+<div className="flex gap-3">
+
+
+<Mail
+
+size={20}
+
+className="text-yellow-500"
+
+/>
+
+
+<a
+
+href="mailto:india173.173@gmail.com"
+
+className="hover:text-yellow-500 break-all"
+
+>
+
+india173.173@gmail.com
+
+</a>
+
+
+</div>
+
+
+
+
+</div>
+
+
+
+
 </div>
 
 
 
 
 
+
+</div>
+
+
+
+
+
+
+
+
+
+{/* BOTTOM */}
 
 
 
@@ -642,9 +748,13 @@ Chat On WhatsApp
 className="
 border-t
 border-white/10
-mt-14
-pt-6
-text-center
+py-6
+flex
+flex-col
+md:flex-row
+justify-between
+items-center
+gap-4
 text-gray-500
 text-sm
 "
@@ -652,8 +762,21 @@ text-sm
 >
 
 
+<p>
+
 © {new Date().getFullYear()} Indian Enterprises. All Rights Reserved.
 
+</p>
+
+
+
+<p>
+
+GST Registered Business | Delhi
+
+</p>
+
+
 
 </div>
 
@@ -662,6 +785,48 @@ text-sm
 
 
 </div>
+
+
+
+
+
+
+{/* TOP BUTTON */}
+
+
+
+<button
+
+onClick={scrollTop}
+
+className="
+fixed
+bottom-6
+right-6
+w-12
+h-12
+rounded-full
+bg-yellow-500
+text-black
+flex
+items-center
+justify-center
+hover:scale-110
+transition
+shadow-xl
+"
+
+>
+
+
+<ArrowUp size={22}/>
+
+
+</button>
+
+
+
+
 
 
 </footer>
@@ -670,6 +835,7 @@ text-sm
 )
 
 }
+
 
 
 export default Footer;

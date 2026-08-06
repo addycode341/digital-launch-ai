@@ -5,62 +5,69 @@ import ProductCard from "../components/products/ProductCard";
 function Printing(){
 
 
-const products=[
+const products = [ 
+  {
+    id: "answer-sheet",
+    name: "Customized School Answer Sheets",
+    image: "/images/answer-sheet.jpg",
+    desc: "Custom printed school answer sheets with school logo, barcode, serial numbering and high-quality paper."
+  },
 
+  {
+    id: "catalogue",
+    name: "Customized Catalogue Printing",
+    image: "/images/catalogue.jpg",
+    desc: "Premium product catalogues with glossy or matte finish for businesses and brands."
+  },
 
-{
-id:"visiting-card",
-name:"Premium Visiting Cards",
-image:"/images/visiting-card.jpg",
-desc:"Luxury visiting card printing with premium finishing."
-},
+  {
+    id: "brochure",
+    name: "Brochure Printing",
+    image: "/images/brochure.jpg",
+    desc: "Professional brochure printing for marketing, events and business promotions."
+  },
 
+  {
+    id: "tri-folder",
+    name: "Tri-Fold Brochure",
+    image: "/images/trifold.jpg",
+    desc: "Premium tri-fold brochures designed for restaurants, companies and promotional campaigns."
+  },
 
+  {
+    id: "price-list",
+    name: "Customized Price List",
+    image: "/images/price-list.jpg",
+    desc: "Elegant and easy-to-read customized price lists for restaurants, salons and retail stores."
+  },
 
-{
-id:"uv-printing",
-name:"Premium UV Printing",
-image:"/images/uv-printing.jpg",
-desc:"High quality UV printing with attractive effects."
-},
+  {
+    id: "tshirt-printing",
+    name: "Customized T-Shirts",
+    image: "/images/printing t-shirt.jpeg",
+    desc: "High-quality custom T-shirt printing for schools, companies, events and promotional branding."
+  },
 
+  {
+    id: "cap-printing",
+    name: "Customized Caps",
+    image: "/images/printing t-shirtcap.jpeg",
+    desc: "Premium logo printed caps for businesses, teams, schools and promotional events."
+  },
 
+  {
+    id: "pen-printing",
+    name: "Customized Pens",
+    image: "/images/pen.jpg",
+    desc: "Corporate branded pens with custom logo printing for giveaways and marketing."
+  },
 
-{
-id:"3d-printing",
-name:"3D Effect Printing",
-image:"/images/3d-printing.jpg",
-desc:"Modern 3D effect printing solutions."
-},
-
-
-
-{
-id:"custom-shape-cutting",
-name:"Custom Shape Cutting",
-image:"/images/shape-cutting.jpg",
-desc:"Custom shape cutting with advanced technology."
-},
-
-
-
-{
-id:"brochure",
-name:"Brochure Printing",
-image:"/images/brochure.jpg",
-desc:"Professional brochures for business branding."
-},
-
-
-
-{
-id:"packaging",
-name:"Packaging Printing",
-image:"/images/packaging.jpg",
-desc:"Creative packaging printing solutions."
-}
-
-
+  {
+    id: "cup-printing",
+    name: "Customized Mugs & Cups",
+    image: "/images/cup.jpg",
+    desc: "Personalized ceramic mugs and cups with company logo, photos or custom designs."
+  }
 ];
 
 

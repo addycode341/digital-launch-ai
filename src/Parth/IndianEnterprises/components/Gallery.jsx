@@ -16,7 +16,7 @@ const galleryItems=[
 title:"Premium Printing",
 category:"Printing Services",
 image:"https://images.unsplash.com/photo-1586282391129-76a6df230234",
-path:"/indian-enterprises/printing"
+path:"/gallery/printing"
 },
 
 
@@ -24,7 +24,7 @@ path:"/indian-enterprises/printing"
 title:"UV & 3D Printing",
 category:"Modern Technology",
 image:"https://images.unsplash.com/photo-1561070791-36c11767b26a",
-path:"/indian-enterprises/printing"
+path:"/gallery/printing"
 },
 
 
@@ -32,7 +32,7 @@ path:"/indian-enterprises/printing"
 title:"Office Stationery",
 category:"Office Essentials",
 image:"https://images.unsplash.com/photo-1455390582262-044cdead277a",
-path:"/indian-enterprises/office-stationery"
+path:"/gallery/office"
 },
 
 
@@ -40,7 +40,7 @@ path:"/indian-enterprises/office-stationery"
 title:"School Stationery",
 category:"Art & Craft",
 image:"https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
-path:"/indian-enterprises/school-stationery"
+path:"/gallery/school"
 },
 
 
@@ -48,7 +48,7 @@ path:"/indian-enterprises/school-stationery"
 title:"Leather Products",
 category:"Leather & Rexine",
 image:"https://images.unsplash.com/photo-1553062407-98eeb64c6a62",
-path:"/indian-enterprises/leather"
+path:"/gallery/leather"
 },
 
 
@@ -56,7 +56,7 @@ path:"/indian-enterprises/leather"
 title:"Customized Products",
 category:"Premium Solutions",
 image:"https://images.unsplash.com/photo-1544816155-12df9643f363",
-path:"/indian-enterprises/leather"
+path:"/gallery/leather"
 }
 
 ];
@@ -80,8 +80,6 @@ overflow-hidden
 
 >
 
-
-{/* Glow */}
 
 <div
 
@@ -116,7 +114,6 @@ z-10
 
 <motion.div
 
-
 initial={{
 opacity:0,
 y:40
@@ -131,7 +128,6 @@ viewport={{
 once:true
 }}
 
-
 className="
 text-center
 mb-16
@@ -140,13 +136,17 @@ mb-16
 >
 
 
-<p className="
+<p
+
+className="
 text-yellow-500
 uppercase
 tracking-[5px]
 font-semibold
 text-sm
-">
+"
+
+>
 
 Our Gallery
 
@@ -154,12 +154,16 @@ Our Gallery
 
 
 
-<h2 className="
+<h2
+
+className="
 text-3xl
 md:text-5xl
 font-bold
 mt-4
-">
+"
+
+>
 
 Our Work &
 
@@ -176,12 +180,16 @@ text-yellow-500
 
 
 
-<p className="
+<p
+
+className="
 text-gray-400
 max-w-2xl
 mx-auto
 mt-5
-">
+"
+
+>
 
 Explore our premium printing solutions,
 stationery collection and leather product range.
@@ -189,9 +197,7 @@ stationery collection and leather product range.
 </p>
 
 
-
 </motion.div>
-
 
 
 
@@ -221,12 +227,10 @@ galleryItems.map((item,index)=>(
 key={index}
 
 
-
 initial={{
 opacity:0,
 y:50
 }}
-
 
 
 whileInView={{
@@ -235,12 +239,10 @@ y:0
 }}
 
 
-
 transition={{
 duration:.5,
 delay:index*.1
 }}
-
 
 
 viewport={{
@@ -249,10 +251,7 @@ once:true
 
 
 
-
 onClick={()=>navigate(item.path)}
-
-
 
 
 className="
@@ -266,9 +265,7 @@ border-white/10
 cursor-pointer
 "
 
-
 >
-
 
 
 <img
@@ -292,9 +289,6 @@ duration-700
 
 
 
-
-{/* Dark Gradient */}
-
 <div
 
 className="
@@ -312,11 +306,6 @@ to-transparent
 
 
 
-
-
-{/* Content */}
-
-
 <div
 
 className="
@@ -328,11 +317,15 @@ p-6
 >
 
 
-<p className="
+<p
+
+className="
 text-yellow-500
 text-sm
 font-semibold
-">
+"
+
+>
 
 {item.category}
 
@@ -340,15 +333,20 @@ font-semibold
 
 
 
-<h3 className="
+<h3
+
+className="
 text-2xl
 font-bold
 mt-2
-">
+"
+
+>
 
 {item.title}
 
 </h3>
+
 
 
 
@@ -367,7 +365,7 @@ transition
 
 >
 
-Explore Products
+Explore Gallery
 
 <ArrowRight size={16}/>
 
@@ -375,16 +373,11 @@ Explore Products
 </div>
 
 
+
 </div>
 
 
 
-
-
-
-
-
-{/* Hover Border */}
 
 
 <div
@@ -399,18 +392,11 @@ group-hover:border-yellow-500/60
 transition
 "
 
->
-
-
-
-</div>
-
-
+/>
 
 
 
 </motion.div>
-
 
 
 ))
@@ -420,7 +406,6 @@ transition
 
 
 </div>
-
 
 
 
@@ -436,3 +421,4 @@ transition
 
 
 export default Gallery;
+

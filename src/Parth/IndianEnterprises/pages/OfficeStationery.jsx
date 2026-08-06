@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import ProductCard from "../components/products/ProductCard";
 
@@ -9,58 +10,52 @@ const products=[
 
 
 {
-id:"premium-files-folders",
-name:"Premium Files & Folders",
+id:"customized-office-files",
+name:"Customized Office Files",
 image:"/images/office-stationery.jpg",
-desc:"Professional office files and folders for document management."
+desc:"Professional office files customized with company name, logo and branding for corporate requirements."
 },
 
 
+
 {
-id:"office-registers",
-name:"Office Registers",
-image:"/images/office-stationery.jpg",
-desc:"High quality registers for offices and businesses."
+id:"plastic-folders",
+name:"Plastic Folders",
+image:"/images/Plastic folder .jpeg",
+desc:"Durable plastic folders for safe document storage and professional office use."
 },
 
 
+
 {
-id:"executive-diaries",
-name:"Executive Diaries",
-image:"/images/office-stationery.jpg",
-desc:"Premium diaries for meetings and corporate use."
+id:"jute-folders",
+name:"Jute Folders",
+image:"/images/jute photo .jpeg",
+desc:"Premium eco-friendly jute folders with customized designs for businesses and corporate gifting."
 },
 
 
+
 {
-id:"pens-writing-supplies",
-name:"Pens & Writing Supplies",
-image:"/images/office-stationery.jpg",
-desc:"Complete range of premium writing stationery."
+id:"paper-folders",
+name:"Paper Folders",
+image:"/images/Paper folder.jpeg",
+desc:"Quality paper folders for offices, institutions and daily document management."
 },
 
-
 {
-id:"office-paper-products",
-name:"Office Paper Products",
-image:"/images/office-stationery.jpg",
-desc:"Quality paper products for daily office requirements."
-},
-
-
-{
-id:"office-accessories",
-name:"Office Accessories",
-image:"/images/office-stationery.jpg",
-desc:"Staplers, folders, clips and other office essentials."
+    id:"Packing-Boxes",
+    name:"Packing Boxes",
+    image:"/images/Packing-box.jpeg",
+    desc:"Durable packing boxes for office and business use, available in various sizes and designs."
 }
-
 
 ];
 
 
 
 return(
+
 
 <section
 
@@ -76,6 +71,9 @@ overflow-hidden
 
 >
 
+
+
+{/* Glow */}
 
 <div
 
@@ -94,6 +92,8 @@ rounded-full
 
 
 
+
+
 <div
 
 className="
@@ -105,6 +105,7 @@ z-10
 "
 
 >
+
 
 
 
@@ -132,12 +133,16 @@ mb-16
 >
 
 
-<p className="
+<p
+
+className="
 text-yellow-500
 uppercase
 tracking-[5px]
 font-semibold
-">
+"
+
+>
 
 Office Solutions
 
@@ -145,38 +150,50 @@ Office Solutions
 
 
 
-<h1 className="
+
+<h1
+
+className="
 text-4xl
 md:text-6xl
 font-bold
 mt-4
-">
+"
+
+>
 
 Premium Office
 
-<span className="
-text-yellow-500
-">
- Stationery
+<span className="text-yellow-500">
+
+Stationery
+
 </span>
+
 
 </h1>
 
 
 
-<p className="
+
+<p
+
+className="
 text-gray-400
 mt-5
 max-w-2xl
 mx-auto
 text-lg
-">
+"
 
-Complete office stationery solutions including files,
-registers, diaries, writing supplies and corporate essentials
-for businesses and professionals.
+>
+
+Customized office files and premium folders
+designed for businesses, corporate offices,
+schools and professional requirements.
 
 </p>
+
 
 
 </motion.div>
@@ -186,12 +203,20 @@ for businesses and professionals.
 
 
 
-<div className="
+
+
+
+<div
+
+className="
 grid
 sm:grid-cols-2
 lg:grid-cols-3
 gap-8
-">
+"
+
+>
+
 
 
 {
@@ -201,25 +226,32 @@ products.map((product,index)=>(
 
 <motion.div
 
+
 key={product.id}
+
 
 initial={{
 opacity:0,
 y:30
 }}
 
+
 whileInView={{
 opacity:1,
 y:0
 }}
 
+
 transition={{
 delay:index*0.1
 }}
 
+
 viewport={{
 once:true
 }}
+
+
 
 >
 
@@ -240,19 +272,27 @@ product={product}
 }
 
 
+
+
 </div>
 
 
 
+
+
 </div>
+
+
 
 
 </section>
 
 
+
 )
 
 }
+
 
 
 export default OfficeStationery;

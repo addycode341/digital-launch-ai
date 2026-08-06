@@ -89,7 +89,7 @@ import SchoolStationery from "./Parth/IndianEnterprises/pages/SchoolStationery";
 import Leather from "./Parth/IndianEnterprises/pages/Leather";
 import ProductDetails from "./Parth/IndianEnterprises/pages/ProductDetails";
 import Services from "./Parth/IndianEnterprises/pages/Services";
-
+import GalleryDetails from "./Parth/IndianEnterprises/pages/GalleryDetails";
 
 function App(){
 
@@ -298,7 +298,10 @@ element={<Services/>}
 
 />
 
-
+<Route
+path="/gallery/:category"
+element={<GalleryDetails/>}
+/>
 
 
 
