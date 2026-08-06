@@ -53,7 +53,6 @@ icon:<Briefcase size={18}/>
 
 
 
-
 // CLOSE MENU
 
 const closeAll=()=>{
@@ -65,8 +64,7 @@ setServiceOpen(false);
 
 
 
-
-// HOME CLICK
+// HOME
 
 const goHome=()=>{
 
@@ -75,43 +73,33 @@ closeAll();
 
 if(window.location.pathname === "/indian-enterprises"){
 
-
 window.scrollTo({
 
 top:0,
-
 behavior:"smooth"
 
 });
-
 
 }
 
 else{
 
-
 navigate("/indian-enterprises");
-
 
 setTimeout(()=>{
 
 window.scrollTo({
 
 top:0,
-
 behavior:"smooth"
 
 });
 
-
-},200);
-
+},300);
 
 }
 
 };
-
-
 
 
 
@@ -123,7 +111,6 @@ const scrollSection=(section)=>{
 closeAll();
 
 
-
 if(window.location.pathname !== "/indian-enterprises"){
 
 
@@ -131,7 +118,6 @@ navigate("/indian-enterprises");
 
 
 setTimeout(()=>{
-
 
 document
 .getElementById(section)
@@ -142,8 +128,7 @@ behavior:"smooth"
 });
 
 
-},300);
-
+},400);
 
 
 }
@@ -164,8 +149,6 @@ behavior:"smooth"
 
 
 };
-
-
 
 
 
@@ -180,14 +163,13 @@ fixed
 top-0
 left-0
 w-full
-z-50
-bg-black/80
+z-[999]
+bg-black/90
 backdrop-blur-xl
 border-b
 border-white/10
 shadow-lg
 "
-
 
 >
 
@@ -205,6 +187,7 @@ justify-between
 "
 
 >
+
 
 
 {/* LOGO */}
@@ -239,7 +222,7 @@ Enterprises
 
 
 
-{/* DESKTOP */}
+{/* DESKTOP MENU */}
 
 
 <div
@@ -253,7 +236,6 @@ text-white
 "
 
 >
-
 
 
 <button
@@ -270,9 +252,6 @@ transition
 Home
 
 </button>
-
-
-
 
 
 
@@ -295,9 +274,6 @@ About
 
 
 
-
-
-
 {/* SERVICES */}
 
 
@@ -313,6 +289,7 @@ onMouseEnter={()=>setServiceOpen(true)}
 onMouseLeave={()=>setServiceOpen(false)}
 
 >
+
 
 
 <button
@@ -340,14 +317,12 @@ Services
 
 
 
-
 <AnimatePresence>
 
 
 {
 
 serviceOpen &&
-
 
 <motion.div
 
@@ -367,7 +342,6 @@ opacity:0,
 y:10
 }}
 
-
 className="
 absolute
 top-10
@@ -380,6 +354,7 @@ rounded-2xl
 p-3
 shadow-2xl
 "
+
 
 >
 
@@ -398,7 +373,6 @@ py-2
 OUR SERVICES
 
 </p>
-
 
 
 {
@@ -454,8 +428,8 @@ transition
 </AnimatePresence>
 
 
-</div>
 
+</div>
 
 
 
@@ -478,10 +452,6 @@ Gallery
 
 
 
-
-
-
-
 <button
 
 onClick={()=>scrollSection("contact")}
@@ -500,14 +470,13 @@ Contact
 
 
 
-
-
-
 <a
 
 href="https://wa.me/919999999999"
 
 target="_blank"
+
+rel="noreferrer"
 
 className="
 bg-yellow-500
@@ -528,17 +497,10 @@ WhatsApp
 
 
 
-
 </div>
 
 
-
-
-
-
-
 {/* MOBILE BUTTON */}
-
 
 
 <button
@@ -568,12 +530,7 @@ open ?
 </button>
 
 
-
 </div>
-
-
-
-
 
 
 
@@ -595,29 +552,47 @@ open &&
 
 
 initial={{
-height:0,
-opacity:0
+
+opacity:0,
+
+y:-20
+
 }}
+
 
 animate={{
-height:"auto",
-opacity:1
+
+opacity:1,
+
+y:0
+
 }}
 
+
 exit={{
-height:0,
-opacity:0
+
+opacity:0,
+
+y:-20
+
 }}
 
 
 className="
 md:hidden
+absolute
+top-20
+left-0
+w-full
 bg-black
 text-white
 px-6
 py-6
-overflow-hidden
+border-t
+border-white/10
+shadow-xl
 "
+
 
 >
 
@@ -628,7 +603,10 @@ onClick={goHome}
 
 className="
 block
+w-full
+text-left
 py-3
+hover:text-yellow-500
 "
 
 >
@@ -640,13 +618,17 @@ Home
 
 
 
+
 <button
 
 onClick={()=>scrollSection("about")}
 
 className="
 block
+w-full
+text-left
 py-3
+hover:text-yellow-500
 "
 
 >
@@ -659,6 +641,9 @@ About
 
 
 
+{/* MOBILE SERVICES */}
+
+
 
 <button
 
@@ -669,6 +654,7 @@ flex
 items-center
 gap-2
 py-3
+hover:text-yellow-500
 "
 
 >
@@ -678,7 +664,6 @@ Services
 <ChevronDown size={16}/>
 
 </button>
-
 
 
 
@@ -718,9 +703,11 @@ items-center
 gap-3
 py-3
 text-gray-300
+hover:text-yellow-500
 "
 
 >
+
 
 {item.icon}
 
@@ -752,7 +739,10 @@ onClick={()=>scrollSection("gallery")}
 
 className="
 block
+w-full
+text-left
 py-3
+hover:text-yellow-500
 "
 
 >
@@ -771,7 +761,10 @@ onClick={()=>scrollSection("contact")}
 
 className="
 block
+w-full
+text-left
 py-3
+hover:text-yellow-500
 "
 
 >
@@ -784,6 +777,33 @@ Contact
 
 
 
+<a
+
+href="https://wa.me/919999999999"
+
+target="_blank"
+
+rel="noreferrer"
+
+className="
+inline-block
+mt-4
+bg-yellow-500
+text-black
+px-6
+py-3
+rounded-full
+font-bold
+"
+
+>
+
+WhatsApp
+
+</a>
+
+
+
 </motion.div>
 
 
@@ -791,6 +811,7 @@ Contact
 
 
 </AnimatePresence>
+
 
 
 
